@@ -1,0 +1,7 @@
+[envs.pin_stub_print-brili]
+command = "python analyzer/pin_stub_print_{args}.py {filename} | brili -p"
+output.exe-out = "-"
+
+[envs.pin_stub_print]
+command = "python analyzer/pin_stub_print_{args}.py {filename}"
+output.stub-out = "-"
