@@ -1,0 +1,3 @@
+[envs.ts2bril-brili]
+command = "ts2bril {filename} | brili -p"
+output.exe-out = "-"
