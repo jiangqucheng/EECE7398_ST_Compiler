@@ -9,7 +9,7 @@ SRC_BRIL = $(addprefix $(BENCHMARK_FOLDER)/, $(addsuffix .bril, $(BENCHMARKS)))
 INTERL_BRIL_JSON = $(addprefix $(BENCHMARK_FOLDER)/, $(addsuffix .bril.json, $(BENCHMARKS)))
 
 # Default BENCHMARKS
-all: check-tools run
+all: check-tools run turnt
 	@echo "Current directory: $(shell pwd)"
 
 # make rules for check-tools
