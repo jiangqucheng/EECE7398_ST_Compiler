@@ -8,6 +8,7 @@ git submodule add https://github.com/sampsyo/bril.git
 conda create -n course-eece7398-st-compiler python=3.10.14
 conda install conda-forge::deno
 conda install flit
+pip install turnt
 # dump venv
 conda env export > environment.yml
 ```
