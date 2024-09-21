@@ -1,4 +1,4 @@
-BENCHMARKS = euler 
+BENCHMARKS = euler fibonacci
 BENCHMARK_FOLDER = benchmark
 
 # TypeScript source file
