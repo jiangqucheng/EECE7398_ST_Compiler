@@ -1,4 +1,4 @@
-# Exploring Bril: A Compiler Homework Experience
+# Homework 1: Exploring Bril
 
 ## Introduction
 
