@@ -2,7 +2,7 @@
 
 ## Prerequisite
 
-Before running any make rules, first ensure the tools required are available in the environment. Please check the Readme located in the root directory of this repo for instructions on setting up the environment. Once the environment is set up, you can use the following command to run a check of the required tools:
+Before running any make rules, ensure the required tools are available in the environment. Please check the [repo Readme](https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/main/README.md) which is located in the root directory of this repo for instructions on setting up the environment. Once the environment is set up, you can use the following command to run a check of the required tools:
 
 ```bash
 make check-tools
