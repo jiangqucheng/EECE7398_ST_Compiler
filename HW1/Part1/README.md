@@ -12,7 +12,7 @@ make check-tools
 
 Benchmarks in this HW are written in Typescript. The path to generate all kinds of stuff are showing in the following graph. 
 
-```{mermaid}
+```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 
 %%| echo: false 
