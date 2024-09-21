@@ -54,7 +54,6 @@ This `*.exe-out` checks the execution output of the modified bril script that is
 
 ### Testing Methods and Inputs
 
-## Testing Methods and Inputs
 I tested the tool with various Bril programs to ensure it correctly counted add instructions and inserted print statements. I created a set of test programs, including `add.bril` and `euler.bril`, which included multiple arithmetic and control flow instructions.
 
 Automated Testing with Turnt: I used turnt to automate the testing process. Each test case was run through the analyzer, and the output was compared against saved outputs.
