@@ -72,3 +72,20 @@ The `printFibonacciSeries` function prints the Fibonacci series up to a given co
 
 Finally, the `printFibonacciSeries` function is called with the argument 10, which means the program will print the first 10 numbers in the Fibonacci sequence. This call demonstrates the functionality of both the `fibonacci` and `printFibonacciSeries` functions, showing how they work together to compute and display the Fibonacci sequence.
 
+
+## `turnt` Verification
+
+`turnt` is a simple snapshot testing tool inspired by Cram and LLVM's lit. It is useful for testing programs that translate text files to other text files, such as compilers. The idea behind Turnt is that each test is represented by an input file, and the tool runs a command to generate an output file. The output file is then compared against a saved "golden" output file to check for any differences.
+
+To use Turnt in my workflow, I have follow these steps:
+
+1. Configure: Create a `turnt.toml` configuration file and specify the command to test. The command include `{filename}` as a placeholder for the input file.
+
+2. Create a test: Write an input file next to the `turnt.toml` file. This input file represents a specific test case.
+
+3. Take a snapshot: Run `turnt --save <input_file>` to execute the specified command with the input file and save the standard output into an output file. Review the output file to ensure it matches the expectations. Both the input and output files are checked into version control.
+
+4. Test the work: Use `turnt <input_file>` to run all the tests and confirm that the output still matches the saved output files. 
+
+For implementation details, you can check the `Makefile` and `turnt.toml` in current folder. The `Makefile` contains targets for running the tests using Turnt, while the `turnt.toml` file specifies the command to be tested and any additional configuration options.
+
