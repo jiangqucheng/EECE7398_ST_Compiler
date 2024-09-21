@@ -87,7 +87,7 @@ To use Turnt in my workflow, I have follow these steps:
 
 4. Test the work: Use `turnt <input_file>` to run all the tests and confirm that the output still matches the saved output files. 
 
-For implementation details, you can check the `Makefile` and `turnt.toml` in current folder. The `Makefile` contains targets for running the tests using Turnt, while the `turnt.toml` file specifies the command to be tested and any additional configuration options.
+For implementation details, you can check the `makefile` and `turnt.toml` in current folder. The `makefile` contains targets for running the tests using Turnt, while the `turnt.toml` file specifies the command to be tested and any additional configuration options.
 
 
 # Homework Compliance Check Requirement
