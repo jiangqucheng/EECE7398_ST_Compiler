@@ -89,3 +89,93 @@ To use Turnt in my workflow, I have follow these steps:
 
 For implementation details, you can check the `Makefile` and `turnt.toml` in current folder. The `Makefile` contains targets for running the tests using Turnt, while the `turnt.toml` file specifies the command to be tested and any additional configuration options.
 
+
+# Homework Compliance Check Requirement
+
+## Test methods, inputs, and quantitative results
+
+### Testing Methods and Inputs
+To ensure the correctness of the benchmarks, I conducted several rounds of testing:
+
+**Unit Testing**: I verified the individual TypeScript functions before converting them into Bril. This was done by executing the TypeScript code and comparing the results with expected outputs.
+
+**Integration Testing**: After converting the TypeScript functions into Bril, I ran the Bril benchmarks using `brili` to ensure they executed correctly and produced expected outputs. For example, the `fibonacci` benchmark was tested with various input values, and the output sequence was compared with the known Fibonacci sequence that is documented on the internet.
+
+**Regression Testing**: I used `turnt` to create saved test outputs for each benchmark. This allowed me to run the benchmarks multiple times and verify that the outputs remained consistent across runs.
+
+```bash
+turnt -e ts2bril-brili --save benchmark/euler.bril
+turnt -e ts2bril-brili --save benchmark/fibonacci.bril
+```
+
+### Quantitative Results
+For each benchmark, I recorded the profile output from `brili` while running each benchmark. The results are summarized below:
+
+**Euler Benchmark**:
+```log
+<!-- STDOUT from program -->
+2.71828152557319225
+<!-- output from brili profiler -->
+total_dyn_inst: 635
+```
+
+**Fibonacci Benchmark**:
+```log
+<!-- STDOUT from program -->
+0.00000000000000000 0.00000000000000000
+1.00000000000000000 1.00000000000000000
+2.00000000000000000 1.00000000000000000
+3.00000000000000000 2.00000000000000000
+4.00000000000000000 3.00000000000000000
+5.00000000000000000 5.00000000000000000
+6.00000000000000000 8.00000000000000000
+7.00000000000000000 13.00000000000000000
+8.00000000000000000 21.00000000000000000
+9.00000000000000000 34.00000000000000000
+<!-- output from brili profiler -->
+total_dyn_inst: 2889
+```
+
+### Full test log
+```bash
+❯ cd EECE7398_ST_Compiler/HW1/Part1
+❯ make
+Checking for deno: Found
+Checking for bril2json: Found
+Checking for bril2txt: Found
+Checking for brili: Found
+Checking for ts2bril: Found
+All tools are available!
+🎯 Generate [benchmark/euler.ts] -> [benchmark/euler.bril.json]
+ts2bril benchmark/euler.ts > benchmark/euler.bril.json
+🧐 Running test on [benchmark/euler.bril.json]
+brili -p < benchmark/euler.bril.json
+2.71828152557319225
+total_dyn_inst: 635
+🎯 Generate [benchmark/fibonacci.ts] -> [benchmark/fibonacci.bril.json]
+ts2bril benchmark/fibonacci.ts > benchmark/fibonacci.bril.json
+🧐 Running test on [benchmark/fibonacci.bril.json]
+brili -p < benchmark/fibonacci.bril.json
+0.00000000000000000 0.00000000000000000
+1.00000000000000000 1.00000000000000000
+2.00000000000000000 1.00000000000000000
+3.00000000000000000 2.00000000000000000
+4.00000000000000000 3.00000000000000000
+5.00000000000000000 5.00000000000000000
+6.00000000000000000 8.00000000000000000
+7.00000000000000000 13.00000000000000000
+8.00000000000000000 21.00000000000000000
+9.00000000000000000 34.00000000000000000
+total_dyn_inst: 2889
+🧐 Running tests on all benchmarks...
+🧪 Running turnt tests...
+1..1
+ok 1 - benchmark/euler.ts ts2bril-brili
+1..1
+ok 1 - benchmark/fibonacci.ts ts2bril-brili
+Current directory: /scratch/work/course/EECE7398_ST_Compiler/HW1/Part1
+rm benchmark/euler.bril.json benchmark/fibonacci.bril.json
+```
+
+## Challenges
+The main challenge was configuring the toolchain and ensuring compatibility with the Bril interpreter. I encountered issues with tool dependencies and resolved them by carefully setting up the environment, as detailed in the `README.md`.
