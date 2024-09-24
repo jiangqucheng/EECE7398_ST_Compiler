@@ -212,6 +212,8 @@ class BrilFunction():
     @property
     def instrs(self) -> List[BrilInstruction]:
         return self._instrs
+    def set_instrs(self, instrs: List[BrilInstruction]):
+        self._instrs = instrs
 
     def __repr__(self):
         arg_dict2str = lambda each_arg_dict: f"{each_arg_dict['name'] if 'name' in each_arg_dict else ''}" + (f"<{each_arg_dict['type']}>" if 'type' in each_arg_dict else '')
