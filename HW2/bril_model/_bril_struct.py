@@ -247,3 +247,12 @@ class BrilScript():
         ret_dict = deepcopy(self._raw)
         ret_dict['functions'] = [instr.dump() for instr in self.functions]
         return ret_dict
+
+    def show(self):
+        print(self)
+        print()
+        for func in self.functions:
+            print(func)
+            for instr in func.instrs:
+                print(f"  {instr}")
+            print()
