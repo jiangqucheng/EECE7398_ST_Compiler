@@ -59,7 +59,7 @@ class BrilInstruction():
     def dump(self) -> dict:
         return self._raw
 
-class BrilInstruction_Constant(BrilInstruction):
+class BrilInstruction_Const(BrilInstruction):
     def __init__(self, raw: dict):
         super().__init__(raw)
         if self.op != 'const':
@@ -97,9 +97,9 @@ class BrilInstruction_Label(BrilInstruction):
         return self._raw['label']
     
     def __repr__(self):
-        return f"{self.__class__.__name__} ::\t[{self.label}]"
+        return f"{self.__class__.__name__} ::\t<|.{self.label}|>"
 
-class BrilInstruction_ValueOp(BrilInstruction):
+class BrilInstruction_ValOp(BrilInstruction):
     def __init__(self, raw: dict):
         super().__init__(raw)
         if self.op not in BRIL_OPCODE_ALL:
@@ -140,7 +140,7 @@ class BrilInstruction_ValueOp(BrilInstruction):
         _dest = '' if (not self.dest) and (not self.type) else _dest
         return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args}"
 
-class BrilInstruction_EffectOp(BrilInstruction):
+class BrilInstruction_EffOp(BrilInstruction):
     def __init__(self, raw: dict):
         super().__init__(raw)
         if self.op not in BRIL_OPCODE_ALL:
@@ -181,12 +181,12 @@ class BrilFunction():
                 if 'label' in instr:
                     self._instrs.append(BrilInstruction_Label(instr))
                 elif 'op' in instr and instr['op'] == 'const':
-                    self._instrs.append(BrilInstruction_Constant(instr))
+                    self._instrs.append(BrilInstruction_Const(instr))
                 else:
-                    self._instrs.append(BrilInstruction_ValueOp(instr))
+                    self._instrs.append(BrilInstruction_ValOp(instr))
             except TypeError:
                 try:
-                    self._instrs.append(BrilInstruction_EffectOp(instr))
+                    self._instrs.append(BrilInstruction_EffOp(instr))
                 except TypeError:
                     self._instrs.append(BrilInstruction(instr))
                     print(f"Warning: Unrecognized instruction: {instr}", file=sys.stderr)
