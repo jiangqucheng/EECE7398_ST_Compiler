@@ -13,7 +13,7 @@ pip install turnt
 conda env export > environment.yml
 ```
 
-### bril interpreter, ts to bril compiler
+### bril interpreter, ts2bril
 ```bash
 cd bril
 deno install brili.ts 
@@ -32,6 +32,7 @@ deno install --allow-env --allow-read ts2bril.ts
 > total_dyn_inst: 4
 > ```
 
+### bril2json, bril2txt
 ```bash
 cd bril-txt
 flit install --symlink
@@ -78,6 +79,16 @@ flit install --symlink
 > }
 > ```
 
+### Brench (HW2)
+```bash
+cd brench
+flit install --symlink
+```
+> Verification
+> ```bash
+> ❯ which brench
+> /home/jiang/miniconda3/envs/course-eece7398-st-compiler/bin/brench
+> ```
 
 ### Start Env
 ```bash
