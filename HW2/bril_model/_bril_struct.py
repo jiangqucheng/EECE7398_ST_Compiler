@@ -8,6 +8,7 @@ from ._bril_constant import BRIL_INSTR_ATTR_POS_SRC, BRIL_OPCODE_ALL
 class BrilInstruction():
     def __init__(self, raw: dict):
         self._raw = deepcopy(raw)
+        self._marks = dict(delete=False, modify=False, replace=False)
         # raise error if there are any other keys.
         AVAILABLE_KEYS = set(['dest', 'type', 'op', 'args', 'funcs', 'labels', 'value', 'label'] + BRIL_INSTR_ATTR_POS_SRC)
         _unparsed_keys = set(raw.keys()) - AVAILABLE_KEYS
@@ -46,6 +47,22 @@ class BrilInstruction():
     @property
     def src(self) -> str:
         return self._raw['src'] if 'src' in self._raw else None
+    
+    @property
+    def is_modified(self) -> bool:
+        return self._marks['modify']
+    def mark_modify(self, value: bool = True):
+        self._marks['modify'] = value
+    @property
+    def is_replaced(self) -> bool:
+        return self._marks['replace']
+    def mark_replace(self, value: bool = True):
+        self._marks['replace'] = value
+    @property
+    def is_deleted(self) -> bool:
+        return self._marks['delete']
+    def mark_delete(self, value: bool = True):
+        self._marks['delete'] = value
 
     def __repr__(self):
         if self.label:
