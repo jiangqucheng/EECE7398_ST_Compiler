@@ -1,3 +1,4 @@
+from __future__ import annotations  # Add this import for forward reference
 import os, sys
 from copy import deepcopy
 from typing import List, Dict, Union
@@ -17,6 +18,9 @@ class BrilInstruction():
     @property
     def dest(self) -> str:
         return self._raw['dest'] if 'dest' in self._raw else None
+    @dest.setter
+    def dest(self, new_value: str):
+        self._raw['dest'] = new_value
     @property
     def type(self) -> str:
         return self._raw['type'] if 'type' in self._raw else None
@@ -26,6 +30,9 @@ class BrilInstruction():
     @property
     def args(self) -> List[str]:
         return self._raw['args'] if 'args' in self._raw else None
+    @args.setter
+    def args(self, new_value: List[str]):
+        self._raw['args'] = new_value
     @property
     def funcs(self) -> List[str]:
         return self._raw['funcs'] if 'funcs' in self._raw else None
@@ -54,9 +61,9 @@ class BrilInstruction():
     def mark_modify(self, value: bool = True):
         self._marks['modify'] = value
     @property
-    def is_replaced(self) -> bool:
+    def is_replaced(self) -> BrilInstruction:
         return self._marks['replace']
-    def mark_replace(self, value: bool = True):
+    def mark_replace(self, value: BrilInstruction):
         self._marks['replace'] = value
     @property
     def is_deleted(self) -> bool:
@@ -72,7 +79,8 @@ class BrilInstruction():
         _args = ', '.join(self.labels) if self.labels else _args
         _dest = f"{self.dest if self.dest else ''}" + " " + (f"({self.type})" if self.type else '') + " <- "
         _dest = '' if (not self.dest) and (not self.type) else _dest
-        return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args}"
+        _marks = "{" + ' '.join([f"{k}={v}" for k, v in self._marks.items() if v]) + "}"
+        return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args} {_marks}"
     def dump(self) -> dict:
         return self._raw
 
@@ -86,15 +94,15 @@ class BrilInstruction_Const(BrilInstruction):
         _unparsed_keys = set(raw.keys()) - AVAILABLE_KEYS
         if _unparsed_keys: raise NotImplementedError(f"{self.__class__.__name__}::Unrecognized keys: {_unparsed_keys} in {raw}")
 
-    @property
-    def value(self) -> Union[int, bool]:
-        return self._raw['value']
-    @property
-    def dest(self) -> str:
-        return self._raw['dest']
-    @property
-    def type(self) -> str:
-        return self._raw['type']
+    # @property
+    # def value(self) -> Union[int, bool]:
+    #     return self._raw['value']
+    # @property
+    # def dest(self) -> str:
+    #     return self._raw['dest']
+    # @property
+    # def type(self) -> str:
+    #     return self._raw['type']
 
     def __repr__(self):
         return f"{self.__class__.__name__} ::\t{self.dest} ({self.type}) <- [{self.op}] {self.value}"
@@ -109,9 +117,9 @@ class BrilInstruction_Label(BrilInstruction):
         _unparsed_keys = set(raw.keys()) - AVAILABLE_KEYS
         if _unparsed_keys: raise NotImplementedError(f"{self.__class__.__name__}::Unrecognized keys: {_unparsed_keys} in {raw}")
 
-    @property
-    def label(self) -> str:
-        return self._raw['label']
+    # @property
+    # def label(self) -> str:
+    #     return self._raw['label']
     
     def __repr__(self):
         return f"{self.__class__.__name__} ::\t<|.{self.label}|>"
@@ -130,24 +138,24 @@ class BrilInstruction_ValOp(BrilInstruction):
         _unparsed_keys = set(raw.keys()) - AVAILABLE_KEYS
         if _unparsed_keys: raise NotImplementedError(f"{self.__class__.__name__}::Unrecognized keys: {_unparsed_keys} in {raw}")
     
-    @property
-    def op(self) -> str:
-        return self._raw['op']
-    @property
-    def dest(self) -> str:
-        return self._raw['dest']
-    @property
-    def type(self) -> str:
-        return self._raw['type']
-    @property
-    def args(self) -> List[str]:
-        return self._raw['args'] if 'args' in self._raw else None
-    @property
-    def funcs(self) -> List[str]:
-        return self._raw['funcs'] if 'funcs' in self._raw else None
-    @property
-    def labels(self) -> List[str]:
-        return self._raw['labels'] if 'labels' in self._raw else None
+    # @property
+    # def op(self) -> str:
+    #     return self._raw['op']
+    # @property
+    # def dest(self) -> str:
+    #     return self._raw['dest']
+    # @property
+    # def type(self) -> str:
+    #     return self._raw['type']
+    # @property
+    # def args(self) -> List[str]:
+    #     return self._raw['args'] if 'args' in self._raw else None
+    # @property
+    # def funcs(self) -> List[str]:
+    #     return self._raw['funcs'] if 'funcs' in self._raw else None
+    # @property
+    # def labels(self) -> List[str]:
+    #     return self._raw['labels'] if 'labels' in self._raw else None
     
     def __repr__(self):
         _args = ', '.join(self.args) if self.args else ''
@@ -155,7 +163,8 @@ class BrilInstruction_ValOp(BrilInstruction):
         _args = ', '.join(self.labels) if self.labels else _args
         _dest = f"{self.dest if self.dest else ''}" + " " + (f"({self.type})" if self.type else '') + " <- "
         _dest = '' if (not self.dest) and (not self.type) else _dest
-        return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args}"
+        _marks = "{" + ' '.join([f"{k}={v}" for k, v in self._marks.items() if v]) + "}"
+        return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args} {_marks}"
 
 class BrilInstruction_EffOp(BrilInstruction):
     def __init__(self, raw: dict):
@@ -171,24 +180,25 @@ class BrilInstruction_EffOp(BrilInstruction):
         _unparsed_keys = set(raw.keys()) - AVAILABLE_KEYS
         if _unparsed_keys: raise NotImplementedError(f"{self.__class__.__name__}::Unrecognized keys: {_unparsed_keys} in {raw}")
     
-    @property
-    def op(self) -> str:
-        return self._raw['op']
-    @property
-    def args(self) -> List[str]:
-        return self._raw['args'] if 'args' in self._raw else None
-    @property
-    def funcs(self) -> List[str]:
-        return self._raw['funcs'] if 'funcs' in self._raw else None
-    @property
-    def labels(self) -> List[str]:
-        return self._raw['labels'] if 'labels' in self._raw else None
+    # @property
+    # def op(self) -> str:
+    #     return self._raw['op']
+    # @property
+    # def args(self) -> List[str]:
+    #     return self._raw['args'] if 'args' in self._raw else None
+    # @property
+    # def funcs(self) -> List[str]:
+    #     return self._raw['funcs'] if 'funcs' in self._raw else None
+    # @property
+    # def labels(self) -> List[str]:
+    #     return self._raw['labels'] if 'labels' in self._raw else None
     
     def __repr__(self):
         _args = ', '.join(self.args) if self.args else ''
         _args = ', '.join(self.funcs) if self.funcs else _args
         _args = ', '.join(self.labels) if self.labels else _args
-        return f"{self.__class__.__name__} ::\t[{self.op}] {_args}"
+        _marks = "{" + ' '.join([f"{k}={v}" for k, v in self._marks.items() if v]) + "}"
+        return f"{self.__class__.__name__} ::\t[{self.op}] {_args} {_marks}"
 
 class BrilFunction():
     def __init__(self, raw: dict):
