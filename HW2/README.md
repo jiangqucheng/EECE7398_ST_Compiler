@@ -7,54 +7,7 @@ This assignment aims to implement two key local optimizations for the Bril inter
 
 ## Detail Design
 
-The homework was divided into two main parts. I’ll walk through the details of my implementation, challenges faced, and the testing process.
-
-- [**Part 1**](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW1/Part1): Creating and Running a New Benchmark
-- [**Part 2**](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW1/Part2): Implementing a Bril Program Stub-Analyzer
-
-
-## Conclusion
-
-This assignment provided a comprehensive introduction to Bril and its tooling ecosystem. By creating benchmarks and developing a custom analyzer, I gained insights into compiler design and intermediate representations.
-
-**Hardest Part**: The most challenging aspect was managing dependencies and environment setup for the Bril toolchain. Careful attention to the `makefile` and troubleshooting through GitHub Discussions helped overcome these issues.
-
-**Testing and Results**: I validated my benchmarks and analyzer using various Bril programs. The tools successfully transformed and analyzed the input programs, demonstrating the utility of Bril in simple code analysis and transformation tasks.
-
-This experience has equipped me with practical skills in working with compiler tools and representations, paving the way for more complex analyses in future assignments.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Implementation Overview
-
-## Abstraction Classes
+### Abstraction Classes
 
 The core of the Bril language representation in this project is implemented in the `bril_model/_bril_struct.py` file. This module provides a structured and object-oriented way to represent Bril programs (`BrilScript`), functions (`BrilFunction`), and instructions (`BrilInstruction`). Each Bril instruction is modeled as a Python object, enabling intuitive manipulation and transformation of the program during optimization.
 
@@ -78,7 +31,7 @@ Together, these classes form a framework for processing Bril language instructio
 
 
 
-# Trivial Dead Code Elimination (DCE)
+### Trivial Dead Code Elimination (DCE)
 
 The Trivial-DCE implementation is encapsulated in `tdce.py`. This script scans through the instructions of a Bril function and removes any instructions whose results are not used before being overwritten. The optimization process involves:
 
@@ -95,9 +48,8 @@ The `trivial_dce_plus` function combines function-level dead code elimination wi
 This straightforward approach efficiently eliminates redundant calculations, contributing to a cleaner and faster program.
 
 
+### Local Value Numbering (LVN)
 
-
-# Local Value Numbering (LVN)
 Local Value Numbering optimization is implemented in `lvn.py`, LVN assigns unique numbers to distinct computations to detect and eliminate redundant expressions within a single block. Key steps include:
 
 **Numbering Expressions**: LVN assigns a unique identifier to each distinct computation. This identifier, or value number, is used to track expressions within a block. If an identical computation is encountered later, the existing value number is reused, eliminating the need to recompute the expression.
@@ -112,7 +64,7 @@ By minimizing redundant calculations, LVN not only optimizes runtime performance
 The implementation also handles commutative operations (e.g., `add`, `mul`, `and`, `or`, `eq`) by normalizing the order of arguments, ensuring that expressions like `a + b` and `b + a` are recognized as identical.
 
 
-# Integration and Testing
+## Integration and Testing
 The `brench` tool is used for batch testing both optimizations across a variety of Bril programs. The `brench_test_lvn.toml` and `brench_test_tdce.toml` configuration files specify the programs and expected results for LVN and DCE tests, respectively. This ensures that both optimizations work correctly and consistently.
 
 As defined in `brench_test_lvn.toml`, we specifies the path to the Bril benchmark programs to be tested, which are all the `*.bril` located in the `../bril/benchmarks/core/`.
@@ -132,7 +84,7 @@ The `hw2p1_s3` pipeline combines function-level dead code elimination and instru
 Each pipeline ultimately runs the optimized Bril program using the `brili` interpreter, passing arguments via the `-p {args}` option.
 
 
-# Results and Analysis
+## Results and Analysis
 
 The optimizations were tested using `brench` tool, which verifies the correctness and performance of the implemented passes. The tool checks the `brili` Standard Output (`STDOUT`) for each test specification to ensure that the optimized programs produce the same results as their unoptimized counterparts. This rigorous testing confirms that the optimization passes do not alter the semantics of the Bril programs.
 
@@ -140,7 +92,7 @@ The testing demonstrated significant improvements in reducing the number of exec
 
 For example, in the original benchmark `check-primes`, the program required _8,468_ instructions to complete its execution. After applying the `hw2p1_s3` optimization pipeline (DCE-only), the number of instructions executed was reduced to _8,419_. Furthermore, using the `hw2p2_s2` optimization pipeline (LVN+DCE), the total instructions executed dropped significantly to _4,238_, representing a reduction to _50.05%_ of the original execution time. This demonstrates the substantial impact of combining LVN and DCE optimizations on program efficiency.
 
-## Raw test log
+### Raw test log
 
 ```bash
 ❯ brench brench_test_tdce.toml
@@ -290,7 +242,7 @@ armstrong,hw2p2_s2,130
 
 
 
-# Conclusion
+## Conclusion
 
 The implementation successfully optimizes Bril programs through Trivial Dead Code Elimination and Local Value Numbering. Both techniques were integrated and tested using brench, confirming their effectiveness. Future work could focus on extending these optimizations to handle more complex cases, such as multi-block programs and interprocedural optimizations.
 
