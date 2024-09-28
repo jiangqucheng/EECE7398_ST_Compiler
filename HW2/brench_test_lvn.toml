@@ -1,0 +1,47 @@
+extract = 'total_dyn_inst: (\d+)'
+benchmarks = '../bril/benchmarks/core/*.bril'
+
+# [runs.baseline]
+# pipeline = [
+#     "bril2json",
+#     "brili -p {args}",
+# ]
+
+# [runs.tdce]
+# pipeline = [
+#     "bril2json",
+#     "python3 ../bril/examples/tdce.py tdce+",
+#     "brili -p {args}",
+# ]
+
+# [runs.lvn]
+# pipeline = [
+#     "bril2json",
+#     "python3 ../bril/examples/lvn.py -p -c -f",
+#     "python3 ../bril/examples/tdce.py tdce+",
+#     "brili -p {args}",
+# ]
+
+# baseline for no optimization
+[runs.baseline]
+pipeline = [
+    "bril2json",
+    "brili -p {args}",
+]
+
+# test if the lvn optimization is correct
+[runs.hw2p2_s1]
+pipeline = [
+    "bril2json",
+    "python3 lvn.py",
+    "brili -p {args}",
+]
+
+# test if the lvn optimization is correct
+[runs.hw2p2_s2]
+pipeline = [
+    "bril2json",
+    "python3 lvn.py",
+    "python3 tdce.py tdce",
+    "brili -p {args}",
+]

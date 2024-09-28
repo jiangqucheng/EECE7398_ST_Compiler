@@ -82,7 +82,8 @@ class BrilInstruction():
         _marks = "{" + ' '.join([f"{k}={v}" for k, v in self._marks.items() if v]) + "}"
         return f"{self.__class__.__name__} ::\t{_dest}[{self.op}] {_args} {_marks}"
     def dump(self) -> dict:
-        return self._raw
+        # do not return if value is None
+        return {k: v for k, v in self._raw.items() if v is not None}
 
 class BrilInstruction_Const(BrilInstruction):
     def __init__(self, raw: dict):

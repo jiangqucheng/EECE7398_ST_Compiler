@@ -169,10 +169,11 @@ def block_lvn_mark(block: List[bm.BrilInstruction]):
                         op='const', dest=instr.dest, type=instr.type, value=num2const[idx]
                     )))
                 else:  # Expr is in a variable.
-                    instr.mark_replace(bm.BrilInstruction_Const(dict(
-                        op='id', dest=instr.dest, type=instr.type, args=[expr_value_assigned_in_vars[idx][0]]
-                    )))
-                    expr_value_assigned_in_vars[idx].append(instr['dest'])  # new place holder for the expr value
+                    if expr_value_assigned_in_vars[idx]:
+                        instr.mark_replace(bm.BrilInstruction_ValOp(dict(
+                            op='id', dest=instr.dest, type=instr.type, args=[expr_value_assigned_in_vars[idx][0]]
+                        )))
+                    expr_value_assigned_in_vars[idx].append(instr.dest)  # new place holder for the expr value
                 continue
 
         # If this instruction produces a result, give it a number.
