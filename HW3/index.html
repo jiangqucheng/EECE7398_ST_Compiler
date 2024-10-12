@@ -57,15 +57,15 @@
     <script>
         // Mapping between bril scripts and their functions
         const scriptFunctionMapping = {
-            "fact.bril": ["main.html"],
+            "in_class_example_1.bril": ["in_class_example_1.html", "main.html"],
             "in_class_example_2.bril": ["main.html"],
-            "is_decreasing.bril": ["last_digit.html", "is_decreasing.html", "main.html"],
             "in_class_example_3.bril": ["in_class_example_3.html", "main.html"],
-            "check_primes.bril": ["main.html", "checkPrime.html"],
+            "fact.bril": ["main.html"],
             "cond.bril": ["main.html"],
-            "birthday.bril": ["probability.html", "main.html"],
             "cond_args.bril": ["main.html"],
-            "in_class_example_1.bril": ["in_class_example_1.html", "main.html"]
+            "is_decreasing.bril": ["last_digit.html", "is_decreasing.html", "main.html"],
+            "check_primes.bril": ["main.html", "checkPrime.html"],
+            "birthday.bril": ["probability.html", "main.html"],
         };
 
         // Default option for dropdowns
@@ -101,7 +101,7 @@
                 scriptFunctionMapping[selectedScript].forEach(functionName => {
                     const option = document.createElement("option");
                     option.value = functionName;
-                    option.textContent = functionName;
+                    option.textContent = functionName.endsWith(".html") ? functionName.slice(0, -5) : functionName;
                     functionSelect.appendChild(option);
                 });
             }
@@ -137,8 +137,8 @@
 
         // Call adjustIframeHeight after the page loads and after any changes
         window.onload = function() {
-            populateBrilScriptOptions();
             adjustIframeHeight();
+            populateBrilScriptOptions();
             restoreSelections(); // Restore the selections on page load
         };
         window.onresize = adjustIframeHeight;
@@ -196,7 +196,7 @@
 
             <div style="flex: 1 1 auto; min-width: 80px;">
             <label for="function">Function:</label>
-            <select id="function" onchange="updateIframe()" style="min-width: 24ch;">
+            <select id="function" onchange="updateIframe()" style="min-width: 20ch;">
                 <option value="">-- Choose --</option>
             </select>
             </div>
