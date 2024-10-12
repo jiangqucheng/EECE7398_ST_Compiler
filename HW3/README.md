@@ -6,6 +6,12 @@ This assignment focuses on implementing dataflow analysis for the Bril intermedi
 
 The report details the design of a flexible framework for these analyses, the implementation strategy for each type of dataflow analysis, and the use of visualization to display the results. The integration and testing process ensures the framework's correctness through various benchmark tests, and the results are analyzed to demonstrate its effectiveness.
 
+## Play Demo
+<p align="center">
+  <a href="https://htmlpreview.github.io/?https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/main/HW3/index.html">
+    <img src="https://github.com/user-attachments/assets/d50a704e-bd77-4b3c-9a4e-210d1d33f9be" width="50%" />
+  </a>
+</p>
 
 ## Detail Design
 
@@ -20,8 +26,6 @@ I add some additional features and fix something like `__repr__` for some of the
 
 Since this task is about analizing some properties of the data-flow graph, a better way to demonstrate it clear and straight forward is to show the computated result in visual format. I developed the framework to view analyze results using `vis.js` and `networkx`.
 
-<!-- TODO: Video here -->
-
 
 <details>
 <summary> 🚧 Expand HERE for HD Video
@@ -35,7 +39,6 @@ Since this task is about analizing some properties of the data-flow graph, a bet
 
 </p>
 </details>
-
 
 
 
