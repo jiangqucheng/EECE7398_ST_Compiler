@@ -21,10 +21,7 @@ I add some additional features and fix something like `__repr__` for some of the
 Since this task is about analizing some properties of the data-flow graph, a better way to demonstrate it clear and straight forward is to show the computated result in visual format. I developed the framework to view analyze results using `vis.js` and `networkx`.
 
 <!-- TODO: Video here -->
-![2024-10-12 05-11-13](https://github.com/user-attachments/assets/754c3777-9e50-48cf-b29f-e96ad15e8e4e)
-https://github.com/user-attachments/assets/29e63cef-2dde-4504-8d43-5998d673ca02
-
-
+![Demo](https://github.com/user-attachments/assets/754c3777-9e50-48cf-b29f-e96ad15e8e4e)
 
 
 ### Dataflow Analysis Implementation
@@ -221,6 +218,13 @@ The visual representation of the analysis results (generated using vis.js and ne
 
 Check the following pages: 
 <!-- TODO: add the markdown iframe to graph.html -->
+
+#### Typical Examples:
+
+**in_class_example_1.bril/liveness**
+
+[![image](https://github.com/user-attachments/assets/5d198551-af77-4b87-82e7-c27b7b1f5962)](https://htmlpreview.github.io/?https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/main/HW3/output/in_class_example_1.bril/liveness/in_class_example_1.html)
+
 
 
 ## Conclusion
