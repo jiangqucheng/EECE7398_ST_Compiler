@@ -1,3 +1,6 @@
 [submodule "bril"]
 	path = bril
 	url = https://github.com/sampsyo/bril.git
+[submodule "pyvis"]
+	path = pyvis
+	url = git@github.com:jiangqucheng/pyvis.git
