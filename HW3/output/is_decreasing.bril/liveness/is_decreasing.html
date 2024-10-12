@@ -1,0 +1,361 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+
+        
+
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100vw;
+                 height: 100vh;
+                 background-color: #ffffff;
+                 border: 0px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+             
+             .card {
+                 border: 0px solid lightgray;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"EXPR": "{mul(tmp1,tmp2)}", "GEN": "{x}", "IN": "{x}", "KILL": "{prev,tmp,tmp1,tmp2,tmp3}", "OUT": "{prev,tmp}", "color": "#97c2fc", "id": "_f153._anon0", "label": "_f153._anon0", "shape": "box", "size": 10, "title": "._f153._anon0:\n\u3000tmp: int = id x;\n\u3000tmp1: int = const 1;\n\u3000tmp2: int = const -1;\n\u3000tmp3: int = mul tmp1 tmp2;\n\u3000prev: int = id tmp3;\n--------\nGEN: {x}\nKILL: {prev,tmp,tmp1,tmp2,tmp3}\nEXPR: {mul(tmp1,tmp2)}\nIN: {x}\nOUT: {prev,tmp}"}, {"EXPR": "{gt(tmp,tmp7)}", "GEN": "{tmp}", "IN": "{prev,tmp}", "KILL": "{tmp7,tmp8}", "OUT": "{prev,tmp}", "color": "#97c2fc", "id": "label4", "label": "label4", "shape": "box", "size": 10, "title": ".label4:\n\u3000tmp7: int = const 0;\n\u3000tmp8: bool = gt tmp tmp7;\n\u3000br tmp8 .label5 .label6;\n--------\nGEN: {tmp}\nKILL: {tmp7,tmp8}\nEXPR: {gt(tmp,tmp7)}\nIN: {prev,tmp}\nOUT: {prev,tmp}"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "{x}", "KILL": "\u2205", "OUT": "{x}", "color": "grey", "id": "ENTRY\nPOINT", "label": "ENTRY\nPOINT", "shape": "circle", "size": 10, "title": "GEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: {x}\nOUT: {x}"}, {"EXPR": "{lt(digit,prev)}", "GEN": "{prev,tmp}", "IN": "{prev,tmp}", "KILL": "{digit,tmp10,tmp9}", "OUT": "{digit,tmp}", "color": "#97c2fc", "id": "label5", "label": "label5", "shape": "box", "size": 10, "title": ".label5:\n\u3000tmp9: int = call last_digit;\n\u3000digit: int = id tmp9;\n\u3000tmp10: bool = lt digit prev;\n\u3000br tmp10 .label11 .label12;\n--------\nGEN: {prev,tmp}\nKILL: {digit,tmp10,tmp9}\nEXPR: {lt(digit,prev)}\nIN: {prev,tmp}\nOUT: {digit,tmp}"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "{tmp17}", "OUT": "\u2205", "color": "#97c2fc", "id": "label6", "label": "label6", "shape": "box", "size": 10, "title": ".label6:\n\u3000tmp17: bool = const True;\n\u3000ret tmp17;\n--------\nGEN: \u2205\nKILL: {tmp17}\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "{tmp14}", "OUT": "\u2205", "color": "#97c2fc", "id": "label11", "label": "label11", "shape": "box", "size": 10, "title": ".label11:\n\u3000tmp14: bool = const False;\n\u3000ret tmp14;\n--------\nGEN: \u2205\nKILL: {tmp14}\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "{digit,tmp}", "KILL": "\u2205", "OUT": "{digit,tmp}", "color": "#97c2fc", "id": "label12", "label": "label12", "shape": "box", "size": 10, "title": ".label12:\n\u3000jmp\u3000.label13;\n--------\nGEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: {digit,tmp}\nOUT: {digit,tmp}"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "\u2205", "OUT": "\u2205", "color": "grey", "id": "RETURN\nPOINT", "label": "RETURN\nPOINT", "shape": "circle", "size": 10, "title": "GEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}, {"EXPR": "\u2205", "GEN": "{digit,tmp}", "IN": "{digit,tmp}", "KILL": "{prev,tmp,tmp15,tmp16}", "OUT": "{prev,tmp}", "color": "#97c2fc", "id": "label13", "label": "label13", "shape": "box", "size": 10, "title": ".label13:\n\u3000prev: int = id digit;\n\u3000tmp15: int = const 10;\n\u3000tmp16: int = div tmp tmp15;\n\u3000tmp: int = id tmp16;\n\u3000jmp\u3000.label4;\n--------\nGEN: {digit,tmp}\nKILL: {prev,tmp,tmp15,tmp16}\nEXPR: \u2205\nIN: {digit,tmp}\nOUT: {prev,tmp}"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "{digit,tmp}", "KILL": "\u2205", "OUT": "{digit,tmp}", "color": "#97c2fc", "id": "_f153._anon1", "label": "_f153._anon1", "shape": "box", "size": 10, "title": "._f153._anon1:\n\u3000jmp\u3000.label13;\n--------\nGEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: {digit,tmp}\nOUT: {digit,tmp}"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "_f153._anon0", "label": "{prev,tmp}", "title": "[fallthrough]", "to": "label4", "width": 1}, {"arrows": "to", "from": "ENTRY\nPOINT", "label": "{x}", "title": "[enter]", "to": "_f153._anon0", "width": 1}, {"arrows": "to", "from": "label4", "label": "{prev,tmp}", "title": "br tmp8 .label5 .label6;", "to": "label5", "width": 1}, {"arrows": "to", "from": "label4", "label": "{prev,tmp}", "title": "br tmp8 .label5 .label6;", "to": "label6", "width": 1}, {"arrows": "to", "from": "label5", "label": "{digit,tmp}", "title": "br tmp10 .label11 .label12;", "to": "label11", "width": 1}, {"arrows": "to", "from": "label5", "label": "{digit,tmp}", "title": "br tmp10 .label11 .label12;", "to": "label12", "width": 1}, {"arrows": "to", "from": "label6", "label": "\u2205", "title": "ret tmp17;", "to": "RETURN\nPOINT", "width": 1}, {"arrows": "to", "from": "label11", "label": "\u2205", "title": "ret tmp14;", "to": "RETURN\nPOINT", "width": 1}, {"arrows": "to", "from": "label12", "label": "{digit,tmp}", "title": "jmp  .label13;", "to": "label13", "width": 1}, {"arrows": "to", "from": "_f153._anon1", "label": "{digit,tmp}", "title": "jmp  .label13;", "to": "label13", "width": 1}, {"arrows": "to", "from": "label13", "label": "{prev,tmp}", "title": "jmp  .label4;", "to": "label4", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false,
+        "hover": true
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.45,
+            "gravitationalConstant": -100,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+                    network.on("click", neighbourhoodHighlight);
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
