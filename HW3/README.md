@@ -23,6 +23,8 @@ Since this task is about analizing some properties of the data-flow graph, a bet
 <!-- TODO: Video here -->
 ![Demo](https://github.com/user-attachments/assets/754c3777-9e50-48cf-b29f-e96ad15e8e4e)
 
+[2024-10-12 05-11-13.webm](https://github.com/user-attachments/assets/efd234eb-a490-478f-a92d-36c4615d5998)
+
 
 ### Dataflow Analysis Implementation
 
