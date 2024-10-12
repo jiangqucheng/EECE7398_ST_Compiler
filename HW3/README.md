@@ -11,7 +11,7 @@ The report details the design of a flexible framework for these analyses, the im
 
 ### Abstraction Classes
 
-The abstraction class remain the same structure as last homework submittion, see detail in [HW2 - Abstraction Classes](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW2#abstraction-classes)
+The abstraction class remain the same structure as last homework submittion, see detail in [HW2 - Abstraction Classes](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW2#abstraction-classes).
 
 I add some additional features and fix something like `__repr__` for some of the classes, therefore use current [`./bril_model`](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW3/bril_model) for further development. 
 
@@ -25,7 +25,7 @@ Since this task is about analizing some properties of the data-flow graph, a bet
 
 ### Dataflow Analysis Implementation
 
-This script performs dataflow analysis on Bril programs, supporting three types of analysis: `liveness`, `availability`, and `busy` expressions. The implementation is designed to be __generic__, allowing for easy extension to other types of dataflow analysis with minimal code changes.
+The script `` performs dataflow analysis on Bril programs, supporting three types of analysis: `liveness`, `availability`, and `busy` expressions. The implementation is designed to be __generic__, allowing for easy extension to other types of dataflow analysis with minimal code changes.
 
 #### 1. Argument Parsing and Setup
 
@@ -39,8 +39,7 @@ parser.add_argument('DEMO_BRIL_FILE', type=str, help='Path to the bril file')
 parser.add_argument('--save-dir', type=str, default='./save', help='Path to save the generated html files')
 args = parser.parse_args()
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L14-L20_
-
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L20-L25_
 
 #### 2. Validation of Arguments
 
@@ -62,7 +61,7 @@ if not correct:
     parser.print_help()
     exit(1)
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L22-L35_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L27-L43_
 
 
 #### 3. Loading the Bril Script
@@ -74,7 +73,7 @@ bbs = bm.BrilScript(script_name=os.path.basename(DEMO_BRIL_FILE), file_dir=os.pa
 app_graph: Dict[bm.BrilFunction, Tuple[nx.DiGraph, Dict[bm.BrilInstruction_Label, List[bm.BrilInstruction]]]] = {}
 update_to_graph(bbs, app_graph)
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L109-L111_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L135-L137_
 
 
 #### 4. Generating GEN, KILL, and EXPR Sets
@@ -97,7 +96,7 @@ def get__args_used_before_assign__assigned__calc_expr_available_at_bb_end(instrs
                 avail_exprs.add(Expr(instr.op, instr.args))
     return used_first, written, avail_exprs
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L117-L130_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L150-L168_
 
 
 #### 5. Updating GEN, KILL, and EXPR Sets
@@ -114,7 +113,7 @@ def update_gen_kill_sets(app_graph: Dict[bm.BrilFunction, Tuple[nx.DiGraph, Dict
             fdg.nodes[each_node]['KILL'] = _kill
             fdg.nodes[each_node]['EXPR'] = _expr
 ```
-\*Reference: #Line 136-143*
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L173-L180_
 
 
 #### 6. Generic Dataflow Analysis
@@ -132,7 +131,7 @@ def _fdg_update_bare_bone(specific_analysis_func: Callable[[nx.DiGraph, str], Tu
             has_changed = True
     return has_changed
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L158-L167_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L202-L213_
 
 
 #### 7. Specific Analysis Functions
@@ -160,7 +159,7 @@ def _fdg_update_internal_busy_sets(fdg: nx.DiGraph, this_node: str) -> Tuple[Set
     _in = set.union(_in, _get_node_expr_set(fdg, this_node))
     return _in, _out
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L169-L197_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L215-L258_
 
 
 #### 8. Running the Analysis
@@ -179,7 +178,7 @@ def update_analysis_sets(analysis_type_str: str , app_graph: Dict[bm.BrilFunctio
         for _, (fdg, _) in app_graph.items():
             has_changed |= _fdg_update_bare_bone(analysis_func, fdg)
 ```
-_\* Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L199-L210_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L266-L277_
 
 
 #### 9. Visualization
@@ -211,7 +210,7 @@ def dump_into_pv_graph(fdg: nx.DiGraph) -> pv.network.Network:
         node['title'] += f"\nOUT: { _out }"
     return net
 ```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/HW3/df_analysis.py#L212-L251_
+_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L367-L376_
 
 
 ### Conclusion
@@ -239,15 +238,15 @@ BTW, to rerun all results that I submitted to this repo, just simply use `make`.
 
 To make life easier, the Bril scripts that are tested in this HW are copied/created in the `./example` folder. The three types of dataflow analyses (`liveness`, `availability`, `busy`) were tested on the following :
 
-[`birthday.bril`](./example/birthday.bril)
-[`check-primes.bril`](./example/check-primes.bril)
-[`cond-args.bril`](./example/cond-args.bril)
-[`cond.bril`](./example/cond.bril)
-[`fact.bril`](./example/fact.bril)
-[`in_class_example_1.bril`](./example/in_class_example_1.bril)
-[`in_class_example_2.bril`](./example/in_class_example_2.bril)
-[`in_class_example_3.bril`](./example/in_class_example_3.bril)
-[`is-decreasing.bril`](./example/is-decreasing.bril)
+- [`birthday.bril`](./example/birthday.bril)
+- [`check-primes.bril`](./example/check-primes.bril)
+- [`cond-args.bril`](./example/cond-args.bril)
+- [`cond.bril`](./example/cond.bril)
+- [`fact.bril`](./example/fact.bril)
+- [`in_class_example_1.bril`](./example/in_class_example_1.bril)
+- [`in_class_example_2.bril`](./example/in_class_example_2.bril)
+- [`in_class_example_3.bril`](./example/in_class_example_3.bril)
+- [`is-decreasing.bril`](./example/is-decreasing.bril)
 
 To view the graph, set up a `http` server and use any of your favourite modern web browsers to open the `.html` file that just generated.
 
