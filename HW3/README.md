@@ -41,7 +41,7 @@ Since this task is about analizing some properties of the data-flow graph, a bet
 
 ### Dataflow Analysis Implementation
 
-The script `` performs dataflow analysis on Bril programs, supporting three types of analysis: `liveness`, `availability`, and `busy` expressions. The implementation is designed to be __generic__, allowing for easy extension to other types of dataflow analysis with minimal code changes.
+The script `df_analysis.py` performs dataflow analysis on Bril programs, supporting three types of analysis: `liveness`, `availability`, and `busy` expressions. The implementation is designed to be __generic__, allowing for easy extension to other types of dataflow analysis with minimal code changes.
 
 ---
 
