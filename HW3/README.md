@@ -27,191 +27,131 @@ Since this task is about analizing some properties of the data-flow graph, a bet
 
 The script `` performs dataflow analysis on Bril programs, supporting three types of analysis: `liveness`, `availability`, and `busy` expressions. The implementation is designed to be __generic__, allowing for easy extension to other types of dataflow analysis with minimal code changes.
 
+---
+
 #### 1. Argument Parsing and Setup
 
-The script starts by parsing command-line arguments to determine the type of analysis to perform and the input Bril file.
+The script begins by utilizing the `argparse` module to handle command-line argument parsing. This allows the user to specify three key arguments when running the script:
 
-```python
-import argparse
-parser = argparse.ArgumentParser(description='Generate data flow graph for a bril script')
-parser.add_argument('ANALYSIS', type=str, help='Analysis: [liveness, availability, busy]')
-parser.add_argument('DEMO_BRIL_FILE', type=str, help='Path to the bril file')
-parser.add_argument('--save-dir', type=str, default='./save', help='Path to save the generated html files')
-args = parser.parse_args()
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L20-L25_
+- `ANALYSIS`: Specifies the type of dataflow analysis to perform. The valid options are `'liveness'`, `'availability'`, or `'busy'`. This argument is required and ensures the script knows what kind of analysis to perform on the Bril program.
+- `DEMO_BRIL_FILE`: This is the path to the Bril program that will be analyzed. The file contains the intermediate representation (IR) of the program.
+- `--save-dir`: An optional argument that specifies where to save the generated output HTML files (visualizations). If not provided, the default directory `./save` is used.
+
+By parsing these arguments, the script can dynamically handle different types of analysis and ensure the correct files are processed and results saved to the right locations.
+
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L20-L25
+
+---
 
 #### 2. Validation of Arguments
 
-The script validates the provided arguments to ensure the analysis type is supported and the input file exists.
+Once the arguments are parsed, the script proceeds to validate them:
 
-```python
-ANALYSIS = args.ANALYSIS.lower()
-DEMO_BRIL_FILE = args.DEMO_BRIL_FILE
-SAVE_DIR = args.save_dir
+- `ANALYSIS`: The provided value is converted to lowercase for consistency. The script checks whether the specified analysis type is one of the allowed options: `'liveness'`, `'availability'`, or `'busy'`. If the user specifies an unsupported analysis, the script prints an error message and exits.
+- `DEMO_BRIL_FILE`: The script checks if the provided file path exists on the system. If not, an error message is displayed, and the script terminates.
+- If all validations pass, the script proceeds with the execution; otherwise, it prints the usage information (`parser.print_help()`) to guide the user on how to run the script correctly.
 
-correct = True
-if ANALYSIS not in ['liveness', 'availability', 'busy']:
-    print(f"Analysis <{ANALYSIS}> not supported")
-    correct = False
-if not os.path.exists(DEMO_BRIL_FILE):
-    print(f"File <{DEMO_BRIL_FILE}> not found")
-    correct = False
-if not correct:
-    parser.print_help()
-    exit(1)
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L27-L43_
+This ensures that only valid input and analysis types are processed.
 
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L27-L43
+
+---
 
 #### 3. Loading the Bril Script
 
-The Bril script is loaded into a `BrilScript` object, and the control flow graph (CFG) is constructed for each function.
+The script loads the Bril program into a `BrilScript` object, which represents the structure of the input program. This object provides an abstraction over the Bril instructions and functions, making it easier to manipulate and analyze.
 
-```python
-bbs = bm.BrilScript(script_name=os.path.basename(DEMO_BRIL_FILE), file_dir=os.path.dirname(DEMO_BRIL_FILE))
-app_graph: Dict[bm.BrilFunction, Tuple[nx.DiGraph, Dict[bm.BrilInstruction_Label, List[bm.BrilInstruction]]]] = {}
-update_to_graph(bbs, app_graph)
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L135-L137_
+- The `BrilScript` object is initialized with the name of the file, and the control flow graph (CFG) for each function in the Bril script is constructed. The CFG represents how control flows between basic blocks (sequences of instructions without branches) in each function, which is crucial for performing dataflow analysis.
+- `app_graph` is a dictionary that maps each `BrilFunction` to a tuple consisting of a `networkx` directed graph (the CFG) and a mapping of labels to their corresponding instructions.
 
+The CFG provides the foundation for performing various types of dataflow analysis, as it organizes the program's structure into a form that can be traversed and analyzed.
 
-#### 4. Generating GEN, KILL, and EXPR Sets
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L135-L137
 
-For each basic block, the script calculates the sets of variables and expressions that are used before being defined (GEN), modified (KILL), and available at the end of the block (EXPR).
+---
 
-```python
-def get__args_used_before_assign__assigned__calc_expr_available_at_bb_end(instrs: List[bm.BrilInstruction]) -> Tuple[Set[str],Set[str],Set[Expr]]:
-    used_first: Set[str] = set()
-    written: Set[str] = set()
-    avail_exprs: Set[Expr] = set()
-    for instr in instrs:
-        used_first.update(set(instr.args if instr.args else []) - written)
-        if instr.dest:
-            for expr in list(avail_exprs):
-                if instr.dest in expr.args:
-                    avail_exprs.remove(expr)
-            written.add(instr.dest)
-            if instr.args and instr.op not in ['id', 'const', 'call']:
-                avail_exprs.add(Expr(instr.op, instr.args))
-    return used_first, written, avail_exprs
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L150-L168_
+#### 4. Generating `GEN`, `KILL`, and `EXPR` Sets
 
+For each basic block, the script calculates three sets:
 
-#### 5. Updating GEN, KILL, and EXPR Sets
+- **`GEN`**: The set of variables used before being assigned a new value in the block. These are the variables that "generate" dependencies in the block.
+- **`KILL`**: The set of variables that are redefined or "killed" within the block.
+- **`EXPR`**: The set of expressions that are still available at the end of the block.
 
-The script updates the GEN, KILL, and EXPR sets for each basic block in the CFG.
+The function `get__args_used_before_assign__assigned__calc_expr_available_at_bb_end` iterates over the instructions in a basic block. It collects the following information:
+- `used_first`: Variables that are used before any assignment in the block.
+- `written`: Variables that are assigned new values within the block.
+- `avail_exprs`: Expressions that remain available for future use at the end of the block, ensuring that they haven't been invalidated by any assignments.
 
-```python
-def update_gen_kill_sets(app_graph: Dict[bm.BrilFunction, Tuple[nx.DiGraph, Dict[bm.BrilInstruction_Label, List[bm.BrilInstruction]]]]):
-    for _, (fdg, _) in app_graph.items():
-        for each_node, each_node_data in fdg.nodes(data=True):
-            each_block: List[bm.BrilInstruction] = each_node_data.get('instructions', None)
-            _gen, _kill, _expr = gen_kill_expr_sets(each_block) if each_block else (set(), set(), set())
-            fdg.nodes[each_node]['GEN'] = _gen
-            fdg.nodes[each_node]['KILL'] = _kill
-            fdg.nodes[each_node]['EXPR'] = _expr
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L173-L180_
+The `GEN`, `KILL`, and `EXPR` sets are essential for performing dataflow analysis like liveness and availability, which rely on tracking how variables and expressions evolve over the program.
 
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L150-L168
+
+---
+
+#### 5. Updating `GEN`, `KILL`, and `EXPR` Sets
+
+After calculating the `GEN`, `KILL`, and `EXPR` sets for each basic block, the script updates the CFG with this information. The `update_gen_kill_sets` function iterates over each node (basic block) in the CFG and stores the calculated `GEN`, `KILL`, and `EXPR` sets in the node's attributes.
+
+This step enriches the CFG with the necessary dataflow information, setting up the foundation for more complex analyses like determining which variables are live or which expressions are available.
+
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L173-L180
+
+---
 
 #### 6. Generic Dataflow Analysis
 
-The script defines a generic function `_fdg_update_bare_bone` that performs the common part of the analysis. This function is then used to implement specific analysis types (liveness, availability, busy).
+The script defines a generic dataflow analysis function `_fdg_update_bare_bone`, which can be adapted for different types of analyses (liveness, availability, busy expressions). This function operates by traversing the CFG and updating the `IN` and `OUT` sets of each node (basic block):
 
-```python
-def _fdg_update_bare_bone(specific_analysis_func: Callable[[nx.DiGraph, str], Tuple[Set[str], Set[str]]], fdg: nx.DiGraph) -> bool:
-    has_changed = False
-    for this_node, _ in fdg.nodes(data=True):
-        _in, _out = specific_analysis_func(fdg, this_node)
-        if _in != _get_node_in_set(fdg, this_node) or _out != _get_node_out_set(fdg, this_node):
-            fdg.nodes[this_node]['IN'] = _in
-            fdg.nodes[this_node]['OUT'] = _out
-            has_changed = True
-    return has_changed
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L202-L213_
+- **`IN`**: The set of variables or expressions that are live or available at the entry to a basic block.
+- **`OUT`**: The set of variables or expressions that are live or available at the exit of a basic block.
 
+The function takes as input a specific analysis function (e.g., for liveness or availability) and applies it to update the `IN` and `OUT` sets for each node. The function also checks whether the `IN` and `OUT` sets change during the analysis—if they do, it indicates that the dataflow information has propagated, and further iterations are required.
+
+The generic nature of this function minimizes code duplication and allows the script to easily switch between different types of analyses.
+
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L202-L213
+
+---
 
 #### 7. Specific Analysis Functions
 
-The script defines specific functions for each type of analysis, which are passed to the generic function.
+The script defines specific analysis functions for each type of dataflow analysis:
 
-```python
-def _fdg_update_internal_liveness_sets(fdg: nx.DiGraph, this_node: str) -> Tuple[Set[str], Set[str]]:
-    _temp_succ_req = [_get_node_in_set(fdg, each_succ_node) for each_succ_node in _get_node_succ_set(fdg, this_node)]
-    _out: Set[str] = set.union(*_temp_succ_req) if _temp_succ_req else set()
-    _in: Set[str] = set.union(_get_node_gen_set(fdg, this_node), set.difference(_out, _get_node_kill_set(fdg, this_node)))
-    return _in, _out
+- **Liveness Analysis**: Computes the `IN` and `OUT` sets based on the liveness of variables. It updates the sets by looking at the successors of each node and determining which variables are still live at the entry of a basic block.
+  
+- **Availability Analysis**: Determines which expressions are available at the entry and exit of a block. It considers the predecessor nodes and checks whether the expressions remain valid by avoiding any variables that were killed in the block.
 
-def _fdg_update_internal_availability_sets(fdg: nx.DiGraph, this_node: str) -> Tuple[Set[Expr], Set[Expr]]:
-    _temp_pred_give = [_get_node_out_set(fdg, each_pred_node) for each_pred_node in _get_node_pred_set(fdg, this_node)]
-    _in: Set[Expr] = set.intersection(*_temp_pred_give) if _temp_pred_give else set()
-    _out: Set[Expr] = set.union(_get_node_in_set(fdg, this_node), _get_node_expr_set(fdg, this_node))
-    _out = set([each_expr for each_expr in _out if not set.intersection(set(each_expr.args), _get_node_kill_set(fdg, this_node))])
-    return _in, _out
+- **Busy Expressions Analysis**: Identifies which expressions must be computed before reaching the next use of a variable. This analysis is useful for identifying common subexpressions that can be optimized.
 
-def _fdg_update_internal_busy_sets(fdg: nx.DiGraph, this_node: str) -> Tuple[Set[Expr], Set[Expr]]:
-    _temp_succ_req = [_get_node_in_set(fdg, each_succ_node) for each_succ_node in _get_node_succ_set(fdg, this_node)]
-    _out: Set[Expr] = set.intersection(*_temp_succ_req) if _temp_succ_req else set()
-    _in: Set[Expr] = set([each_expr for each_expr in _out if not set.intersection(set(each_expr.args), _get_node_kill_set(fdg, this_node))])
-    _in = set.union(_in, _get_node_expr_set(fdg, this_node))
-    return _in, _out
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L215-L258_
+Each function is passed to the generic `_fdg_update_bare_bone` function to perform the corresponding analysis.
 
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L215-L258
+
+---
 
 #### 8. Running the Analysis
 
-The script runs the selected analysis type by calling the `update_analysis_sets` function.
+The `update_analysis_sets` function orchestrates the execution of the selected analysis. Based on the user’s input (liveness, availability, or busy), the corresponding analysis function is retrieved from a mapping (`ANALYSIS_FUNC`). 
 
-```python
-def update_analysis_sets(analysis_type_str: str , app_graph: Dict[bm.BrilFunction, Tuple[nx.DiGraph, Dict[bm.BrilInstruction_Label, List[bm.BrilInstruction]]]]):
-    analysis_func = ANALYSIS_FUNC.get(analysis_type_str, None)
-    if not analysis_func:
-        print(f"Analysis <{analysis_type_str}> not supported")
-        return
-    has_changed = True
-    while has_changed:
-        has_changed = False
-        for _, (fdg, _) in app_graph.items():
-            has_changed |= _fdg_update_bare_bone(analysis_func, fdg)
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L266-L277_
+The analysis is executed iteratively, updating the CFG with the calculated `IN` and `OUT` sets until no further changes occur. This iterative approach is necessary because dataflow analysis typically involves propagating information through the CFG until a fixed point is reached (i.e., the point where further iterations don’t change the dataflow sets).
 
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L266-L277
+
+---
 
 #### 9. Visualization
 
-Finally, the script generates an HTML visualization of the CFG with the computed IN and OUT sets for each node.
+The script concludes by generating a visual representation of the CFG using the `pyvis` library. It creates an interactive HTML file that displays the CFG along with the computed `IN`, `OUT`, `GEN`, `KILL`, and `EXPR` sets for each basic block.
 
-```python
-def dump_into_pv_graph(fdg: nx.DiGraph) -> pv.network.Network:
-    net = pv.network.Network(
-        directed=True,
-        neighborhood_highlight=True,
-        notebook=True,
-        cdn_resources="jiang", 
-        height="100vh",
-        width="100vw",
-    )
-    net.from_nx(fdg)
-    for node in net.nodes:
-        node['IN'] = _in = generate_set_str(node.pop('IN', set()))
-        node['OUT'] = _out = generate_set_str(node.pop('OUT', set()))
-        node['GEN'] = _gen = generate_set_str(node.pop('GEN', set()))
-        node['KILL'] = _kill = generate_set_str(node.pop('KILL', set()))
-        node['EXPR'] = _expr = generate_set_str([str(x) for x in node.pop('EXPR', set())])
-        node['title'] = "\n  ".join([obj.to_briltxt() if hasattr(obj, 'to_briltxt') else str(obj) for obj in node.pop('instructions', [])])
-        node['title'] += f"\nGEN: { _gen }"
-        node['title'] += f"\nKILL: { _kill }"
-        node['title'] += f"\nEXPR: { _expr }"
-        node['title'] += f"\nIN: { _in }"
-        node['title'] += f"\nOUT: { _out }"
-    return net
-```
-_\*Reference: https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L367-L376_
+- The `dump_into_pv_graph` function takes the CFG as input and converts it into a visual format. For each node (basic block) in the CFG, the `IN`, `OUT`, `GEN`, `KILL`, and `EXPR` sets are formatted as strings and added as attributes to the node in the visualization.
+- The visualization allows users to interact with the CFG, inspect the dataflow information for each node, and understand the results of the analysis in a more intuitive manner.
 
+This final step provides a clear and accessible way to verify the results of the analysis.
+
+https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/601e0e9ae2116bd59ef11847346e94e5bc639a0f/HW3/df_analysis.py#L318-L376
+
+---
 
 ### Conclusion
 
