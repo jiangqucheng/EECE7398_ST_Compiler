@@ -226,6 +226,11 @@ Check the following pages:
 [![image](https://github.com/user-attachments/assets/5d198551-af77-4b87-82e7-c27b7b1f5962)](https://htmlpreview.github.io/?https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/main/HW3/output/in_class_example_1.bril/liveness/in_class_example_1.html)
 
 
+**in_class_example_3.bril/busy**
+
+[![image](https://github.com/user-attachments/assets/5278828a-171e-4b81-9c38-3411a36ce964)](https://htmlpreview.github.io/?https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/main/HW3/output/in_class_example_3.bril/busy/in_class_example_3.html)
+
+
 
 ## Conclusion
 
