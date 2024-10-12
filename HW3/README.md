@@ -21,6 +21,10 @@ I add some additional features and fix something like `__repr__` for some of the
 Since this task is about analizing some properties of the data-flow graph, a better way to demonstrate it clear and straight forward is to show the computated result in visual format. I developed the framework to view analyze results using `vis.js` and `networkx`.
 
 <!-- TODO: Video here -->
+![2024-10-12 05-11-13](https://github.com/user-attachments/assets/754c3777-9e50-48cf-b29f-e96ad15e8e4e)
+https://github.com/user-attachments/assets/29e63cef-2dde-4504-8d43-5998d673ca02
+
+
 
 
 ### Dataflow Analysis Implementation
