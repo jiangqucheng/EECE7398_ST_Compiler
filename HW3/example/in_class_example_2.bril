@@ -9,7 +9,7 @@
 # }
 # return a + b;
 
-@in_class_example_2() {
+@main() {
   x: int = const 1;
   y: int = const 2;
   z: int = const 3;
@@ -36,9 +36,4 @@
   print print_val;
   zero: int = const 0;
   ret;
-}
-
-@main {
-  # cond: bool = const true;
-  call @in_class_example_2;
 }
