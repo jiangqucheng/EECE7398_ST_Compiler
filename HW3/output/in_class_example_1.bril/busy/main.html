@@ -25,6 +25,11 @@
              .card {
                  border: 0px solid lightgray;
              }
+             
+             body {
+                 overflow-y: hidden; /* Hide vertical scrollbar */
+                 overflow-x: hidden; /* Hide horizontal scrollbar */
+             }
 
              
 
@@ -74,8 +79,8 @@
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "\u2205", "OUT": "\u2205", "color": "grey", "id": "ENTRY\nPOINT", "label": "ENTRY\nPOINT", "shape": "circle", "size": 10, "title": "GEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "{input}", "OUT": "\u2205", "color": "#97c2fc", "id": "_f537._anon0", "label": "_f537._anon0", "shape": "box", "size": 10, "title": "._f537._anon0:\n\u3000input: int = const 10;\n\u3000call in_class_example_1;\n--------\nGEN: \u2205\nKILL: {input}\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}]);
-                  edges = new vis.DataSet([{"arrows": "to", "from": "ENTRY\nPOINT", "label": "\u2205", "title": "[enter]", "to": "_f537._anon0", "width": 1}]);
+                  nodes = new vis.DataSet([{"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "\u2205", "OUT": "\u2205", "color": "grey", "id": "ENTRY\nPOINT", "label": "ENTRY\nPOINT", "shape": "circle", "size": 10, "title": "GEN: \u2205\nKILL: \u2205\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}, {"EXPR": "\u2205", "GEN": "\u2205", "IN": "\u2205", "KILL": "{input}", "OUT": "\u2205", "color": "#97c2fc", "id": "_f244._anon0", "label": "_f244._anon0", "shape": "box", "size": 10, "title": "._f244._anon0:\n\u3000input: int = const 10;\n\u3000call in_class_example_1;\n--------\nGEN: \u2205\nKILL: {input}\nEXPR: \u2205\nIN: \u2205\nOUT: \u2205"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "ENTRY\nPOINT", "label": "\u2205", "title": "[enter]", "to": "_f244._anon0", "width": 1}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });
