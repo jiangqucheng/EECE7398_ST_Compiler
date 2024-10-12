@@ -291,7 +291,7 @@ def dump_into_pv_graph(fdg: nx.DiGraph) -> pv.network.Network:
         directed=True,
         neighborhood_highlight=True,
         notebook=True,
-        cdn_resources="remote", 
+        cdn_resources="jiang", 
         height="100vh",
         width="100vw",
     )
