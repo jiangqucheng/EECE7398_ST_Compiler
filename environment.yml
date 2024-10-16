@@ -14,6 +14,7 @@ dependencies:
   - docutils=0.18.1=py310h06a4308_3
   - flit=3.9.0=py310h06a4308_1
   - flit-core=3.9.0=py310hee27c6d_1
+  - graphviz=2.50.0=h1b29801_1
   - idna=3.7=py310h06a4308_0
   - ld_impl_linux-64=2.38=h1181459_1
   - libffi=3.4.4=h6a678d5_1
