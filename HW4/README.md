@@ -113,9 +113,10 @@ https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73
 The integration and testing phase focuses on verifying the correctness of the dominance analysis by evaluating its results against various test cases. The goal is to ensure that the dominance rules defined in the dominator tree are upheld for different basic block execution paths. This involves checking if any execution sequence violates the dominance relationships established by the analysis. To achieve this, the following steps are used:
 
 1. **General Testing Approach**:
-   - The idea is to iterate over all possible paths of execution in the Control Flow Graph (CFG) and validate the dominance properties. Specifically, we ensure that if block `BB1` dominates block `BB2`, then any execution path reaching `BB2` must pass through `BB1`.
+   - The basic and general idea of verification is to __iterate over all possible paths of execution__ in the Control Flow Graph (CFG) and validate the dominance properties. Specifically, we ensure that if block `BB1` dominates block `BB2`, then any execution path reaching `BB2` must pass through `BB1`.
    - For each basic block, we confirm that its set of dominators conforms to the expectations as derived from the dominator tree.
    - The results are compared against reference outputs from well-understood examples discussed in class, as well as other edge cases designed to stress test the analysis.
+   - All analysis output are checked manually, and stored as the __golden snapshot using `turnt` toolchain__. To test any modification, use command `make turnt` to submit a fast check if anything have changed. 
 
 2. **Test Cases**:
    - To thoroughly validate the implementation, several test cases in `.bril` format are used, which cover a variety of CFG structures. These include:
