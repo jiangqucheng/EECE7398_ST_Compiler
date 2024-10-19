@@ -57,56 +57,46 @@ The script `dom_analysis.py` is designed to perform dominance analysis on Bril p
 #### 1. **Imports and Argument Parsing**
    - The code imports necessary libraries like `os`, `networkx`, `pyvis`, and `matplotlib` for graph visualization, as well as custom modules from `bril_model`.
    - It also sets up argument parsing to allow the user to specify the Bril file to analyze and an optional save directory for generated outputs.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L1-L16
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L1-L46
 
 #### 2. **Basic Block Definition**
    - This section defines the `BasicBlock` class, representing a basic block in the CFG. Each basic block consists of a label and a list of instructions.
    - It also includes properties for successors (`succ`) and predecessors (`pred`), which form the edges in the CFG.
    - The class implements various methods for equality checks, hashing, and string representation.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L19-L45
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L48-L86
 
 #### 3. **Forming Basic Blocks from Bril Functions**
    - The function `iter_func_blocks` generates basic blocks from the provided Bril script by iterating over each function in the script and forming blocks based on instruction labels.
    - For functions without explicit labels, it creates anonymous basic blocks.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L47-L72
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L89-L101
 
 #### 4. **Generating the CFG**
    - The `generate_func_cfg_dict` function builds the CFG by establishing the control flow between basic blocks. It adds `entry` and `return` blocks to represent the start and end points of a function.
    - It iterates over the blocks and updates the predecessors and successors based on control flow instructions (`jmp`, `br`, `ret`).
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L74-L120
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L103-L156
 
 #### 5. **Computing Dominators**
    - The `generate_dom_dict` function calculates the dominators for each block using an iterative fixed-point algorithm.
    - Initially, every block is assumed to dominate itself and all others. The algorithm repeatedly refines the dominator sets by intersecting the dominator sets of each block's predecessors.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L122-L136
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L162-L183
 
 #### 6. **Immediate Dominator Calculation**
    - The `get_lease_superset_dom` function identifies the immediate dominator for a given block by finding the closest dominator in the dominator set.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L138-L143
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L185-L187
 
 #### 7. **Dominance Frontier Computation**
    - The `get_dom_frontier` function determines the dominance frontier for a given block. It checks blocks where the dominance relationship changes based on control flow.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L145-L148
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L189-L191
 
 #### 8. **Graph Visualization**
    - The code includes helper functions for generating graph visualizations using `Graphviz`. The functions `create_graphviz_dot_node` and `create_graphviz_dot_edge` create nodes and edges for the CFG and dominator tree graphs.
    - The `create_graphviz_dot` function produces separate visualizations for the CFG and dominator tree.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L150-L181
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L211-L258
 
 #### 9. **Main Execution**
    - The script loads the specified Bril file and constructs the CFG for the functions in the script.
    - It then generates the dot files for the CFG and dominator tree, saving them in the specified directory.
-
-https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/582ec4af9db61066263f73f055c9d0579694f2a8/HW4/dom_analysis.py#L183-L201
-
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/16fcb6796f098b2512a380d5c717b4d431890cbf/HW4/dom_analysis.py#L261-L281
 
 ### Integration and Testing
 
