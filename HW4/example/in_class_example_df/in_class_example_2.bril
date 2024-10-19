@@ -1,0 +1,39 @@
+# Example from class
+
+# var x, y, z, a, b;
+# z = a + b;
+# y = a * b;
+# while (y > a + b) {
+#   a = a + 1;
+#   x = a + b;
+# }
+# return a + b;
+
+@main() {
+  x: int = const 1;
+  y: int = const 2;
+  z: int = const 3;
+  a: int = const 47;
+  b: int = const 42;
+.bb1:
+  z: int = add a b;
+.bb2:
+  y: int = mul a b;
+.bb_compare:
+  cond_right: int = add a b;
+  cond_left: bool = id y;
+  cond: bool = gt cond_left cond_right;
+  br cond .bb4 .bb5;
+.bb4:
+.bb4_0:
+  one: int = const 1;
+  a: int = add a one;
+.bb4_1:
+  x: int = add a b;
+  jmp .bb_compare;
+.bb5:
+  print_val: int = add a b;
+  print print_val;
+  zero: int = const 0;
+  ret;
+}

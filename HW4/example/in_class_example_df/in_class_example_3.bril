@@ -1,0 +1,45 @@
+# Example from class
+
+# var x, a, b;
+# x = input;
+# a = x - 1;
+# b = x - 2;
+# while (x > 0) {
+#   totp1 = a * b;
+#   totp2 = totp1 - x;
+#   print(totp2);
+#   x = x - 1;
+# }
+# totp1 = a * b;
+# print(totp1);
+
+@in_class_example_3( input: int ) {
+  x: int = id input;
+  one: int = const 1;
+  two: int = const 2;
+.bb1:
+  a: int = sub x one;
+.bb2:
+  b: int = sub x two;
+.bb_compare:
+  zero: int = const 0;
+  cond: bool = gt x zero;
+  br cond .bb_loop .bb_return;
+.bb_loop:
+.bb_loop_1:
+  totp1: int = mul a b;
+  totp2: int = sub totp1 x;
+  print totp2;
+.bb_loop_2:
+  x: int = sub x one;
+  jmp .bb_compare;
+.bb_return:
+  totp1: int = mul a b;
+  print totp1;
+  ret;
+} 
+
+@main {
+  input: int = const 10;
+  call @in_class_example_3 input;
+}
