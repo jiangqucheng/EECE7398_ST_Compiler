@@ -10,7 +10,8 @@ import graphviz as gv
 from typing import Iterable, Tuple, Set, List, Dict, OrderedDict, Optional
 import bril_model as bm
 from bril_model.form_blocks import form_blocks
-
+from hashlib import sha256
+fast_hash = lambda str: sha256(str).hexdigest()[:3]
 
 
 # usage: <this_script> DEMO_BRIL_FILE [--save-dir=./save] 
@@ -92,7 +93,7 @@ def iter_func_blocks(bs: bm.BrilScript) -> Iterable[Tuple[bm.BrilFunction, List[
             if isinstance(each_block[0], bm.BrilInstruction_Label):
                 this_block_label = each_block[0]
             else:
-                this_block_label = bm.BrilInstruction_Label(dict(label='_f{}._anon{}'.format(str(hash(each_func.name)%1000).zfill(3), anonymous_id)))
+                this_block_label = bm.BrilInstruction_Label(dict(label='_f{}._anon{}'.format(fast_hash(each_func.name.encode()), anonymous_id)))
                 anonymous_id += 1
             bbs.append(BasicBlock(this_block_label, each_block))
         yield (each_func, bbs)
