@@ -139,6 +139,8 @@ The integration and testing phase focuses on verifying the correctness of the do
 
 ### Results and Analysis
 
+Check [HERE](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW4/output) to see all graphical testcase results. 
+
 The analysis results demonstrate the correctness and robustness of the dominance utilities. The generated dominance information (dominator sets, dominator tree, and dominance frontier) matches the expected results for all test cases. Below is a summary of the findings:
 
 1. **Branching and Merging**:
