@@ -1,0 +1,1302 @@
+Running analysis on example/edge_cases/simple-branch-n-merge.bril 
+
+BrilScript ::	simple-branch-n-merge.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+entry        : 
+true_branch  : merge
+false_branch : merge
+merge        : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+entry        <- ENTRY        : ENTRY, entry
+true_branch  <- entry        : ENTRY, entry, true_branch
+false_branch <- entry        : ENTRY, entry, false_branch
+merge        <- entry        : ENTRY, entry, merge
+RETURN       <- merge        : ENTRY, entry, merge, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  x: int = const 1;
+  br x .true_branch .false_branch;
+.true_branch:
+  y: int = const 10;
+  jmp  .merge;
+.false_branch:
+  y: int = const 20;
+  jmp  .merge;
+.merge:
+  print y;
+  ret ;
+.RETURN:
+
+output/edge_cases/simple-branch-n-merge/simple-branch-n-merge.bril.cfg.gv.pdf
+output/edge_cases/simple-branch-n-merge/simple-branch-n-merge.bril.domt.gv.pdf
+
+
+
+Running analysis on example/edge_cases/cross-loop.bril 
+
+BrilScript ::	cross-loop.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <16 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop1  : loop1
+loop2  : loop2
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop1  <- entry  : ENTRY, entry, loop1
+loop2  <- loop1  : ENTRY, entry, loop1, loop2
+exit   <- loop2  : ENTRY, entry, exit, loop1, loop2
+RETURN <- exit   : ENTRY, entry, exit, loop1, loop2, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+.loop1:
+  x: int = const 0;
+  one: int = const 1;
+  x: int = add x one;
+  limit1: int = const 5;
+  cond1: bool = lt x limit1;
+  br cond1 .loop1 .loop2;
+.loop2:
+  y: int = const 0;
+  y: int = add y one;
+  limit2: int = const 10;
+  cond2: bool = lt y limit2;
+  br cond2 .loop2 .exit;
+.exit:
+  ret ;
+.RETURN:
+
+output/edge_cases/cross-loop/cross-loop.bril.cfg.gv.pdf
+output/edge_cases/cross-loop/cross-loop.bril.domt.gv.pdf
+
+
+
+Running analysis on example/edge_cases/basic-loop.bril 
+
+BrilScript ::	basic-loop.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <11 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop   : loop
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop   <- entry  : ENTRY, entry, loop
+exit   <- loop   : ENTRY, entry, exit, loop
+RETURN <- exit   : ENTRY, entry, exit, loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  i: int = const 0;
+  one: int = const 1;
+.loop:
+  i: int = add i one;
+  limit: int = const 10;
+  cond: bool = lt i limit;
+  br cond .loop .exit;
+.exit:
+  print i;
+  ret ;
+.RETURN:
+
+output/edge_cases/basic-loop/basic-loop.bril.cfg.gv.pdf
+output/edge_cases/basic-loop/basic-loop.bril.domt.gv.pdf
+
+
+
+Running analysis on example/edge_cases/nested-loops.bril 
+
+BrilScript ::	nested-loops.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <16 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY      : 
+entry      : 
+outer_loop : outer_loop
+inner_loop : inner_loop, outer_loop
+exit       : 
+RETURN     : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY      <- [ROOT]     : ENTRY
+entry      <- ENTRY      : ENTRY, entry
+outer_loop <- entry      : ENTRY, entry, outer_loop
+inner_loop <- outer_loop : ENTRY, entry, inner_loop, outer_loop
+exit       <- outer_loop : ENTRY, entry, exit, outer_loop
+RETURN     <- exit       : ENTRY, entry, exit, outer_loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  i: int = const 0;
+  one: int = const 1;
+.outer_loop:
+  i: int = add i one;
+  limit: int = const 5;
+  outer_cond: bool = lt i limit;
+  br outer_cond .inner_loop .exit;
+.inner_loop:
+  j: int = const 0;
+  j: int = add j one;
+  inner_limit: int = const 3;
+  inner_cond: bool = lt j inner_limit;
+  br inner_cond .inner_loop .outer_loop;
+.exit:
+  ret ;
+.RETURN:
+
+output/edge_cases/nested-loops/nested-loops.bril.cfg.gv.pdf
+output/edge_cases/nested-loops/nested-loops.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_df_check/fact.bril 
+
+BrilScript ::	fact.bril <1 func> @ example/official_df_check
+
+================ BrilFunction ::  main (  ) -> None: <13 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+header       : header
+body         : header
+end          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+header       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, header
+body         <- header       : ENTRY, _f0d6._anon0, body, header
+end          <- header       : ENTRY, _f0d6._anon0, end, header
+RETURN       <- end          : ENTRY, _f0d6._anon0, end, header, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  result: int = const 1;
+  i: int = const 8;
+.header:
+  zero: int = const 0;
+  cond: bool = gt i zero;
+  br cond .body .end;
+.body:
+  result: int = mul result i;
+  one: int = const 1;
+  i: int = sub i one;
+  jmp  .header;
+.end:
+  print result;
+.RETURN:
+
+output/official_df_check/fact/fact.bril.cfg.gv.pdf
+output/official_df_check/fact/fact.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_df_check/cond-args.bril 
+
+BrilScript ::	cond-args.bril <1 func> @ example/official_df_check
+
+=========== BrilFunction ::  main ( cond<bool> ) -> None: <14 instr> ===========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+left         : end
+right        : end
+end          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+left         <- _f0d6._anon0 : ENTRY, _f0d6._anon0, left
+right        <- _f0d6._anon0 : ENTRY, _f0d6._anon0, right
+end          <- _f0d6._anon0 : ENTRY, _f0d6._anon0, end
+RETURN       <- end          : ENTRY, _f0d6._anon0, end, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  a: int = const 47;
+  b: int = const 42;
+  br cond .left .right;
+.left:
+  b: int = const 1;
+  c: int = const 5;
+  jmp  .end;
+.right:
+  a: int = const 2;
+  c: int = const 10;
+  jmp  .end;
+.end:
+  d: int = sub a c;
+  print d;
+.RETURN:
+
+output/official_df_check/cond-args/cond-args.bril.cfg.gv.pdf
+output/official_df_check/cond-args/cond-args.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_df_check/cond.bril 
+
+BrilScript ::	cond.bril <1 func> @ example/official_df_check
+
+================ BrilFunction ::  main (  ) -> None: <15 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+left         : end
+right        : end
+end          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+left         <- _f0d6._anon0 : ENTRY, _f0d6._anon0, left
+right        <- _f0d6._anon0 : ENTRY, _f0d6._anon0, right
+end          <- _f0d6._anon0 : ENTRY, _f0d6._anon0, end
+RETURN       <- end          : ENTRY, _f0d6._anon0, end, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  a: int = const 47;
+  b: int = const 42;
+  cond: bool = const True;
+  br cond .left .right;
+.left:
+  b: int = const 1;
+  c: int = const 5;
+  jmp  .end;
+.right:
+  a: int = const 2;
+  c: int = const 10;
+  jmp  .end;
+.end:
+  d: int = sub a c;
+  print d;
+.RETURN:
+
+output/official_df_check/cond/cond.bril.cfg.gv.pdf
+output/official_df_check/cond/cond.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_core_benchmark/birthday.bril 
+
+BrilScript ::	birthday.bril <2 func> @ example/official_core_benchmark
+
+============ BrilFunction ::  main ( n<float> ) -> None: <6 instr> =============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  v0: float = id n;
+  c: float = call probability;
+  c: float = id c;
+  v1: float = id c;
+  print v1;
+  v2: int = const 0;
+.RETURN:
+
+======== BrilFunction ::  probability ( n<float> ) -> float: <36 instr> ========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f395._anon0 : 
+for.cond.1   : for.cond.1
+for.body.1   : for.cond.1
+for.end.1    : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f395._anon0 <- ENTRY        : ENTRY, _f395._anon0
+for.cond.1   <- _f395._anon0 : ENTRY, _f395._anon0, for.cond.1
+for.body.1   <- for.cond.1   : ENTRY, _f395._anon0, for.body.1, for.cond.1
+for.end.1    <- for.cond.1   : ENTRY, _f395._anon0, for.cond.1, for.end.1
+RETURN       <- for.end.1    : ENTRY, _f395._anon0, for.cond.1, for.end.1, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f395._anon0:
+  v0: float = const 1;
+  prob: float = id v0;
+  v2: float = const 1;
+  i: float = id v2;
+.for.cond.1:
+  v3: float = id i;
+  v4: float = id n;
+  v5: bool = flt v3 v4;
+  br v5 .for.body.1 .for.end.1;
+.for.body.1:
+  v6: float = const 365;
+  v7: float = id i;
+  v8: float = fsub v6 v7;
+  log: float = id v8;
+  v9: float = id log;
+  v10: float = const 365;
+  v11: float = fdiv v9 v10;
+  logUpdated: float = id v11;
+  v12: float = id prob;
+  v13: float = id logUpdated;
+  v14: float = fmul v12 v13;
+  prob: float = id v14;
+  v15: float = id i;
+  v16: float = const 1;
+  v17: float = fadd v15 v16;
+  i: float = id v17;
+  jmp  .for.cond.1;
+.for.end.1:
+  v18: float = const 1;
+  v19: float = id prob;
+  v20: float = const 100;
+  v21: float = fmul v19 v20;
+  v22: float = const 100;
+  v23: float = fdiv v21 v22;
+  v24: float = fsub v18 v23;
+  ret v24;
+.RETURN:
+
+output/official_core_benchmark/birthday/birthday.bril.cfg.gv.pdf
+output/official_core_benchmark/birthday/birthday.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_core_benchmark/is-decreasing.bril 
+
+BrilScript ::	is-decreasing.bril <3 func> @ example/official_core_benchmark
+
+============= BrilFunction ::  main ( x<int> ) -> None: <3 instr> ==============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  tmp0: bool = call is_decreasing;
+  tmp: bool = id tmp0;
+  print tmp;
+.RETURN:
+
+======== BrilFunction ::  is_decreasing ( x<int> ) -> bool: <29 instr> =========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : label4
+_fdc8._anon0 : label4
+label4       : label13
+label5       : label13, RETURN
+label11      : RETURN
+_fdc8._anon1 : label13
+label12      : label13
+label13      : label4
+label6       : RETURN
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_fdc8._anon0 <- ENTRY        : ENTRY, _fdc8._anon0
+label4       <- [ROOT]       : label4
+label5       <- label4       : label4, label5
+label11      <- label5       : label11, label4, label5
+_fdc8._anon1 <- [ROOT]       : _fdc8._anon1
+label12      <- label5       : label12, label4, label5
+label13      <- [ROOT]       : label13
+label6       <- label4       : label4, label6
+RETURN       <- label4       : label4, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._fdc8._anon0:
+  tmp: int = id x;
+  tmp1: int = const 1;
+  tmp2: int = const -1;
+  tmp3: int = mul tmp1 tmp2;
+  prev: int = id tmp3;
+.label4:
+  tmp7: int = const 0;
+  tmp8: bool = gt tmp tmp7;
+  br tmp8 .label5 .label6;
+.label5:
+  tmp9: int = call last_digit;
+  digit: int = id tmp9;
+  tmp10: bool = lt digit prev;
+  br tmp10 .label11 .label12;
+.label11:
+  tmp14: bool = const False;
+  ret tmp14;
+._fdc8._anon1:
+  jmp  .label13;
+.label12:
+  jmp  .label13;
+.label13:
+  prev: int = id digit;
+  tmp15: int = const 10;
+  tmp16: int = div tmp tmp15;
+  tmp: int = id tmp16;
+  jmp  .label4;
+.label6:
+  tmp17: bool = const True;
+  ret tmp17;
+.RETURN:
+
+=========== BrilFunction ::  last_digit ( x<int> ) -> int: <6 instr> ===========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f5f6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f5f6._anon0 <- ENTRY        : ENTRY, _f5f6._anon0
+RETURN       <- _f5f6._anon0 : ENTRY, _f5f6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f5f6._anon0:
+  tmp18: int = const 10;
+  tmp19: int = div x tmp18;
+  tmp20: int = const 10;
+  tmp21: int = mul tmp19 tmp20;
+  tmp22: int = sub x tmp21;
+  ret tmp22;
+.RETURN:
+
+output/official_core_benchmark/is-decreasing/is-decreasing.bril.cfg.gv.pdf
+output/official_core_benchmark/is-decreasing/is-decreasing.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_core_benchmark/check-primes.bril 
+
+BrilScript ::	check-primes.bril <2 func> @ example/official_core_benchmark
+
+============= BrilFunction ::  main ( n<int> ) -> None: <29 instr> =============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+for.cond.1   : for.cond.1
+for.body.1   : for.cond.1
+then.7       : endif.7
+else.7       : endif.7
+endif.7      : for.cond.1
+for.end.1    : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+for.cond.1   <- _f0d6._anon0 : ENTRY, _f0d6._anon0, for.cond.1
+for.body.1   <- for.cond.1   : ENTRY, _f0d6._anon0, for.body.1, for.cond.1
+then.7       <- for.body.1   : ENTRY, _f0d6._anon0, for.body.1, for.cond.1, then.7
+else.7       <- for.body.1   : ENTRY, _f0d6._anon0, else.7, for.body.1, for.cond.1
+endif.7      <- for.body.1   : ENTRY, _f0d6._anon0, endif.7, for.body.1, for.cond.1
+for.end.1    <- for.cond.1   : ENTRY, _f0d6._anon0, for.cond.1, for.end.1
+RETURN       <- for.end.1    : ENTRY, _f0d6._anon0, for.cond.1, for.end.1, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  v2: int = const 1;
+  i: int = id v2;
+.for.cond.1:
+  v3: int = id i;
+  v4: int = id n;
+  v5: bool = lt v3 v4;
+  br v5 .for.body.1 .for.end.1;
+.for.body.1:
+  v6: int = id i;
+  isPrime: bool = call checkPrime;
+  isPrime: bool = id isPrime;
+  v8: bool = id isPrime;
+  br v8 .then.7 .else.7;
+.then.7:
+  v9: int = const 1;
+  print v9;
+  v10: int = const 0;
+  jmp  .endif.7;
+.else.7:
+  v11: int = const 0;
+  print v11;
+  v12: int = const 0;
+.endif.7:
+  v13: int = id i;
+  v14: int = const 1;
+  v15: int = add v13 v14;
+  i: int = id v15;
+  jmp  .for.cond.1;
+.for.end.1:
+.RETURN:
+
+========== BrilFunction ::  checkPrime ( x<int> ) -> bool: <42 instr> ==========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f545._anon0 : 
+then.0       : RETURN
+else.0       : RETURN
+endif.0      : RETURN
+for.cond.5   : for.cond.5, RETURN
+for.body.5   : for.cond.5, RETURN
+then.18      : RETURN
+else.18      : for.cond.5
+endif.18     : for.cond.5
+for.end.5    : RETURN
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f545._anon0 <- ENTRY        : ENTRY, _f545._anon0
+then.0       <- _f545._anon0 : ENTRY, _f545._anon0, then.0
+else.0       <- _f545._anon0 : ENTRY, _f545._anon0, else.0
+endif.0      <- else.0       : ENTRY, _f545._anon0, else.0, endif.0
+for.cond.5   <- endif.0      : ENTRY, _f545._anon0, else.0, endif.0, for.cond.5
+for.body.5   <- for.cond.5   : ENTRY, _f545._anon0, else.0, endif.0, for.body.5, for.cond.5
+then.18      <- for.body.5   : ENTRY, _f545._anon0, else.0, endif.0, for.body.5, for.cond.5, then.18
+else.18      <- for.body.5   : ENTRY, _f545._anon0, else.0, else.18, endif.0, for.body.5, for.cond.5
+endif.18     <- else.18      : ENTRY, _f545._anon0, else.0, else.18, endif.0, endif.18, for.body.5, for.cond.5
+for.end.5    <- for.cond.5   : ENTRY, _f545._anon0, else.0, endif.0, for.cond.5, for.end.5
+RETURN       <- _f545._anon0 : ENTRY, _f545._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f545._anon0:
+  v1: int = id x;
+  v2: int = const 1;
+  v3: bool = le v1 v2;
+  br v3 .then.0 .else.0;
+.then.0:
+  v4: bool = const False;
+  ret v4;
+.else.0:
+.endif.0:
+  v6: int = const 2;
+  i: int = id v6;
+.for.cond.5:
+  v7: int = id i;
+  v8: int = id x;
+  v9: bool = lt v7 v8;
+  br v9 .for.body.5 .for.end.5;
+.for.body.5:
+  v10: int = id x;
+  v11: int = id i;
+  v12: int = div v10 v11;
+  div: int = id v12;
+  v13: int = id div;
+  v14: int = id i;
+  v15: int = mul v13 v14;
+  v16: int = id x;
+  v17: bool = eq v15 v16;
+  isDivisible: bool = id v17;
+  v19: bool = id isDivisible;
+  br v19 .then.18 .else.18;
+.then.18:
+  v20: bool = const False;
+  ret v20;
+.else.18:
+.endif.18:
+  v21: int = id i;
+  v22: int = const 1;
+  v23: int = add v21 v22;
+  i: int = id v23;
+  jmp  .for.cond.5;
+.for.end.5:
+  v24: bool = const True;
+  ret v24;
+.RETURN:
+
+output/official_core_benchmark/check-primes/check-primes.bril.cfg.gv.pdf
+output/official_core_benchmark/check-primes/check-primes.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_dom_check/loopcond.bril 
+
+BrilScript ::	loopcond.bril <1 func> @ example/official_dom_check
+
+================ BrilFunction ::  main (  ) -> None: <22 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop   : loop
+body   : loop
+then   : endif
+endif  : loop
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop   <- entry  : ENTRY, entry, loop
+body   <- loop   : ENTRY, body, entry, loop
+then   <- body   : ENTRY, body, entry, loop, then
+endif  <- body   : ENTRY, body, endif, entry, loop
+exit   <- loop   : ENTRY, entry, exit, loop
+RETURN <- exit   : ENTRY, entry, exit, loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  x: int = const 0;
+  i: int = const 0;
+  one: int = const 1;
+.loop:
+  max: int = const 10;
+  cond: bool = lt i max;
+  br cond .body .exit;
+.body:
+  mid: int = const 5;
+  cond: bool = lt i mid;
+  br cond .then .endif;
+.then:
+  x: int = add x one;
+  jmp  .endif;
+.endif:
+  factor: int = const 2;
+  x: int = mul x factor;
+  i: int = add i one;
+  jmp  .loop;
+.exit:
+  print x;
+.RETURN:
+
+output/official_dom_check/loopcond/loopcond.bril.cfg.gv.pdf
+output/official_dom_check/loopcond/loopcond.bril.domt.gv.pdf
+
+
+
+Running analysis on example/official_dom_check/while.bril 
+
+BrilScript ::	while.bril <1 func> @ example/official_dom_check
+
+============= BrilFunction ::  main ( a<int> ) -> None: <10 instr> =============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+while.cond   : while.cond
+while.body   : while.cond
+while.finish : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+while.cond   <- ENTRY        : ENTRY, while.cond
+while.body   <- while.cond   : ENTRY, while.body, while.cond
+while.finish <- while.cond   : ENTRY, while.cond, while.finish
+RETURN       <- while.finish : ENTRY, while.cond, while.finish, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.while.cond:
+  zero: int = const 0;
+  is_term: bool = eq a zero;
+  br is_term .while.finish .while.body;
+.while.body:
+  one: int = const 1;
+  a: int = sub a one;
+  jmp  .while.cond;
+.while.finish:
+  print a;
+.RETURN:
+
+output/official_dom_check/while/while.bril.cfg.gv.pdf
+output/official_dom_check/while/while.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Natural-Loops.bril 
+
+BrilScript ::	Natural-Loops.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <14 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop   : loop
+if     : loop
+then   : endif
+else   : endif
+endif  : loop
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop   <- entry  : ENTRY, entry, loop
+if     <- loop   : ENTRY, entry, if, loop
+then   <- if     : ENTRY, entry, if, loop, then
+else   <- if     : ENTRY, else, entry, if, loop
+endif  <- if     : ENTRY, endif, entry, if, loop
+exit   <- loop   : ENTRY, entry, exit, loop
+RETURN <- exit   : ENTRY, entry, exit, loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .loop;
+.loop:
+  br cond .if .exit;
+.if:
+  br cond .then .else;
+.then:
+  jmp  .endif;
+.else:
+  jmp  .endif;
+.endif:
+  jmp  .loop;
+.exit:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Natural-Loops/Natural-Loops.bril.cfg.gv.pdf
+output/in_class_example_dom/Natural-Loops/Natural-Loops.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Merge-Branch-and-Cross-Loop.bril 
+
+BrilScript ::	Merge-Branch-and-Cross-Loop.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+a0     : n1
+a1     : n1
+n1     : n1
+n2     : n1
+b      : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+a0     <- entry  : ENTRY, a0, entry
+a1     <- entry  : ENTRY, a1, entry
+n1     <- entry  : ENTRY, entry, n1
+n2     <- n1     : ENTRY, entry, n1, n2
+b      <- n2     : ENTRY, b, entry, n1, n2
+RETURN <- b      : ENTRY, b, entry, n1, n2, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  br cond .a0 .a1;
+.a0:
+  jmp  .n1;
+.a1:
+  jmp  .n1;
+.n1:
+  jmp  .n2;
+.n2:
+  br cond .b .n1;
+.b:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Merge-Branch-and-Cross-Loop/Merge-Branch-and-Cross-Loop.bril.cfg.gv.pdf
+output/in_class_example_dom/Merge-Branch-and-Cross-Loop/Merge-Branch-and-Cross-Loop.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Cycle-without-Header-Two-Entry-Points.bril 
+
+BrilScript ::	Cycle-without-Header-Two-Entry-Points.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <8 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+if     : 
+loop2  : loop1
+loop1  : loop2
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+if     <- entry  : ENTRY, entry, if
+loop2  <- if     : ENTRY, entry, if, loop2
+loop1  <- if     : ENTRY, entry, if, loop1
+RETURN <- [ROOT] : RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .if;
+.if:
+  br cond .loop1 .loop2;
+.loop2:
+  jmp  .loop1;
+.loop1:
+  jmp  .loop2;
+.RETURN:
+
+output/in_class_example_dom/Cycle-without-Header-Two-Entry-Points/Cycle-without-Header-Two-Entry-Points.bril.cfg.gv.pdf
+output/in_class_example_dom/Cycle-without-Header-Two-Entry-Points/Cycle-without-Header-Two-Entry-Points.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Branch-Another-Example.bril 
+
+BrilScript ::	Branch-Another-Example.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <10 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+n1     : 
+n2     : n2
+n3     : n5
+n4     : n5
+n5     : n2
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+n1     <- ENTRY  : ENTRY, n1
+n2     <- n1     : ENTRY, n1, n2
+n3     <- n2     : ENTRY, n1, n2, n3
+n4     <- n2     : ENTRY, n1, n2, n4
+n5     <- n2     : ENTRY, n1, n2, n5
+RETURN <- [ROOT] : RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.n1:
+  jmp  .n2;
+.n2:
+  br cond1 .n3 .n4;
+.n3:
+  jmp  .n5;
+.n4:
+  jmp  .n5;
+.n5:
+  jmp  .n2;
+.RETURN:
+
+output/in_class_example_dom/Branch-Another-Example/Branch-Another-Example.bril.cfg.gv.pdf
+output/in_class_example_dom/Branch-Another-Example/Branch-Another-Example.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Branch-Complex-Example.bril 
+
+BrilScript ::	Branch-Complex-Example.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <18 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+n0     : 
+n5     : n4, n8
+n1     : n4, n8
+n7     : n8
+n6     : n4
+n2     : n4
+n4     : n8
+n3     : n8
+n8     : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+n0     <- ENTRY  : ENTRY, n0
+n5     <- n0     : ENTRY, n0, n5
+n1     <- n0     : ENTRY, n0, n1
+n7     <- n5     : ENTRY, n0, n5, n7
+n6     <- n5     : ENTRY, n0, n5, n6
+n2     <- n1     : ENTRY, n0, n1, n2
+n4     <- n0     : ENTRY, n0, n4
+n3     <- n1     : ENTRY, n0, n1, n3
+n8     <- n0     : ENTRY, n0, n8
+RETURN <- n8     : ENTRY, n0, n8, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.n0:
+  br cond1 .n5 .n1;
+.n5:
+  br cond2 .n7 .n6;
+.n1:
+  br cond3 .n2 .n3;
+.n7:
+  jmp  .n8;
+.n6:
+  jmp  .n4;
+.n2:
+  jmp  .n4;
+.n4:
+  jmp  .n8;
+.n3:
+  jmp  .n8;
+.n8:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Branch-Complex-Example/Branch-Complex-Example.bril.cfg.gv.pdf
+output/in_class_example_dom/Branch-Complex-Example/Branch-Complex-Example.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Merge-Branch-and-Self-Loop.bril 
+
+BrilScript ::	Merge-Branch-and-Self-Loop.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <10 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+a0     : n
+a1     : n
+n      : n
+b      : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+a0     <- entry  : ENTRY, a0, entry
+a1     <- entry  : ENTRY, a1, entry
+n      <- entry  : ENTRY, entry, n
+b      <- n      : ENTRY, b, entry, n
+RETURN <- b      : ENTRY, b, entry, n, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  br cond .a0 .a1;
+.a0:
+  jmp  .n;
+.a1:
+  jmp  .n;
+.n:
+  br cond .b .n;
+.b:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Merge-Branch-and-Self-Loop/Merge-Branch-and-Self-Loop.bril.cfg.gv.pdf
+output/in_class_example_dom/Merge-Branch-and-Self-Loop/Merge-Branch-and-Self-Loop.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Case-Fallthrough.bril 
+
+BrilScript ::	Case-Fallthrough.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <15 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : case0_7, case1
+entry        : case0_7, case1
+switch       : case0_7, case1
+_f0d6._anon0 : case2, dowhile
+case0_7      : case2
+case2        : case1
+case1        : dowhile
+dowhile      : case0_7
+exit         : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+entry        <- ENTRY        : ENTRY, entry
+switch       <- entry        : ENTRY, entry, switch
+_f0d6._anon0 <- [ROOT]       : _f0d6._anon0
+case0_7      <- [ROOT]       : case0_7
+case2        <- [ROOT]       : case2
+case1        <- [ROOT]       : case1
+dowhile      <- [ROOT]       : dowhile
+exit         <- dowhile      : dowhile, exit
+RETURN       <- exit         : dowhile, exit, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .switch;
+.switch:
+  br cond0 .case0_7 .case1;
+._f0d6._anon0:
+  br cond1 .case2 .dowhile;
+.case0_7:
+  jmp  .case2;
+.case2:
+  jmp  .case1;
+.case1:
+  jmp  .dowhile;
+.dowhile:
+  br cond2 .case0_7 .exit;
+.exit:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Case-Fallthrough/Case-Fallthrough.bril.cfg.gv.pdf
+output/in_class_example_dom/Case-Fallthrough/Case-Fallthrough.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_dom/Cycle-with-Header-One-Entry-Point.bril 
+
+BrilScript ::	Cycle-with-Header-One-Entry-Point.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+H1     : H1
+A      : H1
+H2     : H1, H2
+B      : H1, H2
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+H1     <- entry  : ENTRY, H1, entry
+A      <- H1     : ENTRY, A, H1, entry
+H2     <- A      : ENTRY, A, H1, H2, entry
+B      <- H2     : ENTRY, A, B, H1, H2, entry
+exit   <- H1     : ENTRY, H1, entry, exit
+RETURN <- exit   : ENTRY, H1, entry, exit, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .H1;
+.H1:
+  br if_cond .A .exit;
+.A:
+  jmp  .H2;
+.H2:
+  br cond .B .H1;
+.B:
+  br cond .H2 .H1;
+.exit:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Cycle-with-Header-One-Entry-Point/Cycle-with-Header-One-Entry-Point.bril.cfg.gv.pdf
+output/in_class_example_dom/Cycle-with-Header-One-Entry-Point/Cycle-with-Header-One-Entry-Point.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_df/in_class_example_2.bril 
+
+BrilScript ::	in_class_example_2.bril <1 func> @ example/in_class_example_df
+
+================ BrilFunction ::  main (  ) -> None: <26 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+bb1          : 
+bb2          : 
+bb_compare   : bb_compare
+bb4          : bb_compare
+bb4_0        : bb_compare
+bb4_1        : bb_compare
+bb5          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+bb1          <- _f0d6._anon0 : ENTRY, _f0d6._anon0, bb1
+bb2          <- bb1          : ENTRY, _f0d6._anon0, bb1, bb2
+bb_compare   <- bb2          : ENTRY, _f0d6._anon0, bb1, bb2, bb_compare
+bb4          <- bb_compare   : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb_compare
+bb4_0        <- bb4          : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb4_0, bb_compare
+bb4_1        <- bb4_0        : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb4_0, bb4_1, bb_compare
+bb5          <- bb_compare   : ENTRY, _f0d6._anon0, bb1, bb2, bb5, bb_compare
+RETURN       <- bb5          : ENTRY, _f0d6._anon0, bb1, bb2, bb5, bb_compare, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  x: int = const 1;
+  y: int = const 2;
+  z: int = const 3;
+  a: int = const 47;
+  b: int = const 42;
+.bb1:
+  z: int = add a b;
+.bb2:
+  y: int = mul a b;
+.bb_compare:
+  cond_right: int = add a b;
+  cond_left: bool = id y;
+  cond: bool = gt cond_left cond_right;
+  br cond .bb4 .bb5;
+.bb4:
+.bb4_0:
+  one: int = const 1;
+  a: int = add a one;
+.bb4_1:
+  x: int = add a b;
+  jmp  .bb_compare;
+.bb5:
+  print_val: int = add a b;
+  print print_val;
+  zero: int = const 0;
+  ret ;
+.RETURN:
+
+output/in_class_example_df/in_class_example_2/in_class_example_2.bril.cfg.gv.pdf
+output/in_class_example_df/in_class_example_2/in_class_example_2.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_df/in_class_example_3.bril 
+
+BrilScript ::	in_class_example_3.bril <2 func> @ example/in_class_example_df
+
+==== BrilFunction ::  in_class_example_3 ( input<int> ) -> None: <23 instr> ====
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_fedf._anon0 : 
+bb1          : 
+bb2          : 
+bb_compare   : bb_compare
+bb_loop      : bb_compare
+bb_loop_1    : bb_compare
+bb_loop_2    : bb_compare
+bb_return    : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_fedf._anon0 <- ENTRY        : ENTRY, _fedf._anon0
+bb1          <- _fedf._anon0 : ENTRY, _fedf._anon0, bb1
+bb2          <- bb1          : ENTRY, _fedf._anon0, bb1, bb2
+bb_compare   <- bb2          : ENTRY, _fedf._anon0, bb1, bb2, bb_compare
+bb_loop      <- bb_compare   : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop
+bb_loop_1    <- bb_loop      : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop, bb_loop_1
+bb_loop_2    <- bb_loop_1    : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop, bb_loop_1, bb_loop_2
+bb_return    <- bb_compare   : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_return
+RETURN       <- bb_return    : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_return, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._fedf._anon0:
+  x: int = id input;
+  one: int = const 1;
+  two: int = const 2;
+.bb1:
+  a: int = sub x one;
+.bb2:
+  b: int = sub x two;
+.bb_compare:
+  zero: int = const 0;
+  cond: bool = gt x zero;
+  br cond .bb_loop .bb_return;
+.bb_loop:
+.bb_loop_1:
+  totp1: int = mul a b;
+  totp2: int = sub totp1 x;
+  print totp2;
+.bb_loop_2:
+  x: int = sub x one;
+  jmp  .bb_compare;
+.bb_return:
+  totp1: int = mul a b;
+  print totp1;
+  ret ;
+.RETURN:
+
+================ BrilFunction ::  main (  ) -> None: <2 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_3;
+.RETURN:
+
+output/in_class_example_df/in_class_example_3/in_class_example_3.bril.cfg.gv.pdf
+output/in_class_example_df/in_class_example_3/in_class_example_3.bril.domt.gv.pdf
+
+
+
+Running analysis on example/in_class_example_df/in_class_example_1.bril 
+
+BrilScript ::	in_class_example_1.bril <2 func> @ example/in_class_example_df
+
+==== BrilFunction ::  in_class_example_1 ( input<int> ) -> None: <33 instr> ====
+---------------------------------- Dom-Front -----------------------------------
+ENTRY             : 
+_ffb1._anon0      : 
+assign_input_to_x : 
+is_x_gt_1         : is_x_gt_1
+loop_start        : is_x_gt_1
+is_y_gt_3         : is_x_gt_1
+y_gt_3            : loop_cont1
+loop_cont1        : is_x_gt_1
+is_z_gt_0         : is_x_gt_1
+z_gt_0            : loop_cont2
+loop_cont2        : is_x_gt_1
+print_output      : 
+RETURN            : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY             <- [ROOT]            : ENTRY
+_ffb1._anon0      <- ENTRY             : ENTRY, _ffb1._anon0
+assign_input_to_x <- _ffb1._anon0      : ENTRY, _ffb1._anon0, assign_input_to_x
+is_x_gt_1         <- assign_input_to_x : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1
+loop_start        <- is_x_gt_1         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, loop_start
+is_y_gt_3         <- loop_start        : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_start
+y_gt_3            <- is_y_gt_3         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_start, y_gt_3
+loop_cont1        <- is_y_gt_3         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_cont1, loop_start
+is_z_gt_0         <- loop_cont1        : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_start
+z_gt_0            <- is_z_gt_0         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_start, z_gt_0
+loop_cont2        <- is_z_gt_0         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_cont2, loop_start
+print_output      <- is_x_gt_1         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, print_output
+RETURN            <- print_output      : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, print_output, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._ffb1._anon0:
+  zero: int = const 0;
+  one: int = const 1;
+  two: int = const 2;
+  three: int = const 3;
+  four: int = const 4;
+  x: int = const 0;
+  y: int = const 0;
+  z: int = const 0;
+.assign_input_to_x:
+  x: int = id input;
+.is_x_gt_1:
+  cond1: bool = gt x one;
+  br cond1 .loop_start .print_output;
+.loop_start:
+  y: int = div x two;
+.is_y_gt_3:
+  cond2: bool = gt y three;
+  br cond2 .y_gt_3 .loop_cont1;
+.y_gt_3:
+  x: int = sub x y;
+.loop_cont1:
+  z: int = sub x four;
+.is_z_gt_0:
+  cond3: bool = gt z zero;
+  br cond3 .z_gt_0 .loop_cont2;
+.z_gt_0:
+  x: int = div x two;
+.loop_cont2:
+  z: int = sub z one;
+  jmp  .is_x_gt_1;
+.print_output:
+  print x;
+  ret ;
+.RETURN:
+
+================ BrilFunction ::  main (  ) -> None: <2 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_1;
+.RETURN:
+
+output/in_class_example_df/in_class_example_1/in_class_example_1.bril.cfg.gv.pdf
+output/in_class_example_df/in_class_example_1/in_class_example_1.bril.domt.gv.pdf
+
+
+

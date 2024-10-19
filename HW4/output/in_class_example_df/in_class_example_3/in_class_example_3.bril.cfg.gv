@@ -1,0 +1,62 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_in_class_example_3 {
+		label=in_class_example_3
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_in_class_example_3_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_in_class_example_3_NODE_ENTRY -> "FUNC_in_class_example_3_NODE__fedf._anon0"
+		"FUNC_in_class_example_3_NODE__fedf._anon0" [label="._fedf._anon0:
+  x: int = id input;
+  one: int = const 1;
+  two: int = const 2;" shape=box]
+		"FUNC_in_class_example_3_NODE__fedf._anon0" -> FUNC_in_class_example_3_NODE_bb1
+		FUNC_in_class_example_3_NODE_bb1 [label=".bb1:
+  a: int = sub x one;" shape=box]
+		FUNC_in_class_example_3_NODE_bb1 -> FUNC_in_class_example_3_NODE_bb2
+		FUNC_in_class_example_3_NODE_bb2 [label=".bb2:
+  b: int = sub x two;" shape=box]
+		FUNC_in_class_example_3_NODE_bb2 -> FUNC_in_class_example_3_NODE_bb_compare
+		FUNC_in_class_example_3_NODE_bb_compare [label=".bb_compare:
+  zero: int = const 0;
+  cond: bool = gt x zero;
+  br cond .bb_loop .bb_return;" shape=box]
+		FUNC_in_class_example_3_NODE_bb_compare -> FUNC_in_class_example_3_NODE_bb_compare [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_in_class_example_3_NODE_bb_compare -> FUNC_in_class_example_3_NODE_bb_return
+		FUNC_in_class_example_3_NODE_bb_compare -> FUNC_in_class_example_3_NODE_bb_loop
+		FUNC_in_class_example_3_NODE_bb_loop [label=".bb_loop:" shape=box]
+		FUNC_in_class_example_3_NODE_bb_loop -> FUNC_in_class_example_3_NODE_bb_compare [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_in_class_example_3_NODE_bb_loop -> FUNC_in_class_example_3_NODE_bb_loop_1
+		FUNC_in_class_example_3_NODE_bb_loop_1 [label=".bb_loop_1:
+  totp1: int = mul a b;
+  totp2: int = sub totp1 x;
+  print totp2;" shape=box]
+		FUNC_in_class_example_3_NODE_bb_loop_1 -> FUNC_in_class_example_3_NODE_bb_compare [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_in_class_example_3_NODE_bb_loop_1 -> FUNC_in_class_example_3_NODE_bb_loop_2
+		FUNC_in_class_example_3_NODE_bb_loop_2 [label=".bb_loop_2:
+  x: int = sub x one;
+  jmp  .bb_compare;" shape=box]
+		FUNC_in_class_example_3_NODE_bb_loop_2 -> FUNC_in_class_example_3_NODE_bb_compare [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_in_class_example_3_NODE_bb_loop_2 -> FUNC_in_class_example_3_NODE_bb_compare
+		FUNC_in_class_example_3_NODE_bb_return [label=".bb_return:
+  totp1: int = mul a b;
+  print totp1;
+  ret ;" shape=box]
+		FUNC_in_class_example_3_NODE_bb_return -> FUNC_in_class_example_3_NODE_RETURN
+		FUNC_in_class_example_3_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> "FUNC_main_NODE__f0d6._anon0"
+		"FUNC_main_NODE__f0d6._anon0" [label="._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_3;" shape=box]
+		"FUNC_main_NODE__f0d6._anon0" -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

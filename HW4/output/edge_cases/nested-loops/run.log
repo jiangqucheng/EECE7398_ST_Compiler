@@ -1,0 +1,39 @@
+BrilScript ::	nested-loops.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <16 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY      : 
+entry      : 
+outer_loop : outer_loop
+inner_loop : inner_loop, outer_loop
+exit       : 
+RETURN     : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY      <- [ROOT]     : ENTRY
+entry      <- ENTRY      : ENTRY, entry
+outer_loop <- entry      : ENTRY, entry, outer_loop
+inner_loop <- outer_loop : ENTRY, entry, inner_loop, outer_loop
+exit       <- outer_loop : ENTRY, entry, exit, outer_loop
+RETURN     <- exit       : ENTRY, entry, exit, outer_loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  i: int = const 0;
+  one: int = const 1;
+.outer_loop:
+  i: int = add i one;
+  limit: int = const 5;
+  outer_cond: bool = lt i limit;
+  br outer_cond .inner_loop .exit;
+.inner_loop:
+  j: int = const 0;
+  j: int = add j one;
+  inner_limit: int = const 3;
+  inner_cond: bool = lt j inner_limit;
+  br inner_cond .inner_loop .outer_loop;
+.exit:
+  ret ;
+.RETURN:
+
+output/edge_cases/nested-loops/nested-loops.bril.cfg.gv.pdf
+output/edge_cases/nested-loops/nested-loops.bril.domt.gv.pdf

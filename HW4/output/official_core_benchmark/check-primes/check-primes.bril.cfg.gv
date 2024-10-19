@@ -1,0 +1,132 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> "FUNC_main_NODE__f0d6._anon0"
+		"FUNC_main_NODE__f0d6._anon0" [label="._f0d6._anon0:
+  v2: int = const 1;
+  i: int = id v2;" shape=box]
+		"FUNC_main_NODE__f0d6._anon0" -> "FUNC_main_NODE_for.cond.1"
+		"FUNC_main_NODE_for.cond.1" [label=".for.cond.1:
+  v3: int = id i;
+  v4: int = id n;
+  v5: bool = lt v3 v4;
+  br v5 .for.body.1 .for.end.1;" shape=box]
+		"FUNC_main_NODE_for.cond.1" -> "FUNC_main_NODE_for.cond.1" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_main_NODE_for.cond.1" -> "FUNC_main_NODE_for.body.1"
+		"FUNC_main_NODE_for.cond.1" -> "FUNC_main_NODE_for.end.1"
+		"FUNC_main_NODE_for.body.1" [label=".for.body.1:
+  v6: int = id i;
+  isPrime: bool = call checkPrime;
+  isPrime: bool = id isPrime;
+  v8: bool = id isPrime;
+  br v8 .then.7 .else.7;" shape=box]
+		"FUNC_main_NODE_for.body.1" -> "FUNC_main_NODE_for.cond.1" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_main_NODE_for.body.1" -> "FUNC_main_NODE_else.7"
+		"FUNC_main_NODE_for.body.1" -> "FUNC_main_NODE_then.7"
+		"FUNC_main_NODE_then.7" [label=".then.7:
+  v9: int = const 1;
+  print v9;
+  v10: int = const 0;
+  jmp  .endif.7;" shape=box]
+		"FUNC_main_NODE_then.7" -> "FUNC_main_NODE_endif.7" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_main_NODE_then.7" -> "FUNC_main_NODE_endif.7"
+		"FUNC_main_NODE_else.7" [label=".else.7:
+  v11: int = const 0;
+  print v11;
+  v12: int = const 0;" shape=box]
+		"FUNC_main_NODE_else.7" -> "FUNC_main_NODE_endif.7" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_main_NODE_else.7" -> "FUNC_main_NODE_endif.7"
+		"FUNC_main_NODE_endif.7" [label=".endif.7:
+  v13: int = id i;
+  v14: int = const 1;
+  v15: int = add v13 v14;
+  i: int = id v15;
+  jmp  .for.cond.1;" shape=box]
+		"FUNC_main_NODE_endif.7" -> "FUNC_main_NODE_for.cond.1" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_main_NODE_endif.7" -> "FUNC_main_NODE_for.cond.1"
+		"FUNC_main_NODE_for.end.1" [label=".for.end.1:" shape=box]
+		"FUNC_main_NODE_for.end.1" -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+	subgraph cluster_checkPrime {
+		label=checkPrime
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_checkPrime_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_checkPrime_NODE_ENTRY -> "FUNC_checkPrime_NODE__f545._anon0"
+		"FUNC_checkPrime_NODE__f545._anon0" [label="._f545._anon0:
+  v1: int = id x;
+  v2: int = const 1;
+  v3: bool = le v1 v2;
+  br v3 .then.0 .else.0;" shape=box]
+		"FUNC_checkPrime_NODE__f545._anon0" -> "FUNC_checkPrime_NODE_then.0"
+		"FUNC_checkPrime_NODE__f545._anon0" -> "FUNC_checkPrime_NODE_else.0"
+		"FUNC_checkPrime_NODE_then.0" [label=".then.0:
+  v4: bool = const False;
+  ret v4;" shape=box]
+		"FUNC_checkPrime_NODE_then.0" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_then.0" -> FUNC_checkPrime_NODE_RETURN
+		"FUNC_checkPrime_NODE_else.0" [label=".else.0:" shape=box]
+		"FUNC_checkPrime_NODE_else.0" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_else.0" -> "FUNC_checkPrime_NODE_endif.0"
+		"FUNC_checkPrime_NODE_endif.0" [label=".endif.0:
+  v6: int = const 2;
+  i: int = id v6;" shape=box]
+		"FUNC_checkPrime_NODE_endif.0" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_endif.0" -> "FUNC_checkPrime_NODE_for.cond.5"
+		"FUNC_checkPrime_NODE_for.cond.5" [label=".for.cond.5:
+  v7: int = id i;
+  v8: int = id x;
+  v9: bool = lt v7 v8;
+  br v9 .for.body.5 .for.end.5;" shape=box]
+		"FUNC_checkPrime_NODE_for.cond.5" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_for.cond.5" -> "FUNC_checkPrime_NODE_for.cond.5" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_for.cond.5" -> "FUNC_checkPrime_NODE_for.end.5"
+		"FUNC_checkPrime_NODE_for.cond.5" -> "FUNC_checkPrime_NODE_for.body.5"
+		"FUNC_checkPrime_NODE_for.body.5" [label=".for.body.5:
+  v10: int = id x;
+  v11: int = id i;
+  v12: int = div v10 v11;
+  div: int = id v12;
+  v13: int = id div;
+  v14: int = id i;
+  v15: int = mul v13 v14;
+  v16: int = id x;
+  v17: bool = eq v15 v16;
+  isDivisible: bool = id v17;
+  v19: bool = id isDivisible;
+  br v19 .then.18 .else.18;" shape=box]
+		"FUNC_checkPrime_NODE_for.body.5" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_for.body.5" -> "FUNC_checkPrime_NODE_for.cond.5" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_for.body.5" -> "FUNC_checkPrime_NODE_else.18"
+		"FUNC_checkPrime_NODE_for.body.5" -> "FUNC_checkPrime_NODE_then.18"
+		"FUNC_checkPrime_NODE_then.18" [label=".then.18:
+  v20: bool = const False;
+  ret v20;" shape=box]
+		"FUNC_checkPrime_NODE_then.18" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_then.18" -> FUNC_checkPrime_NODE_RETURN
+		"FUNC_checkPrime_NODE_else.18" [label=".else.18:" shape=box]
+		"FUNC_checkPrime_NODE_else.18" -> "FUNC_checkPrime_NODE_for.cond.5" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_else.18" -> "FUNC_checkPrime_NODE_endif.18"
+		"FUNC_checkPrime_NODE_endif.18" [label=".endif.18:
+  v21: int = id i;
+  v22: int = const 1;
+  v23: int = add v21 v22;
+  i: int = id v23;
+  jmp  .for.cond.5;" shape=box]
+		"FUNC_checkPrime_NODE_endif.18" -> "FUNC_checkPrime_NODE_for.cond.5" [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_endif.18" -> "FUNC_checkPrime_NODE_for.cond.5"
+		"FUNC_checkPrime_NODE_for.end.5" [label=".for.end.5:
+  v24: bool = const True;
+  ret v24;" shape=box]
+		"FUNC_checkPrime_NODE_for.end.5" -> FUNC_checkPrime_NODE_RETURN [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		"FUNC_checkPrime_NODE_for.end.5" -> FUNC_checkPrime_NODE_RETURN
+		FUNC_checkPrime_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

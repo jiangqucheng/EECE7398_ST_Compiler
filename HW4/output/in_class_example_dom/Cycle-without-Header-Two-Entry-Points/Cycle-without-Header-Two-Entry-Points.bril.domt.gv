@@ -1,0 +1,23 @@
+// Dominator Tree
+digraph DOMTREE {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_entry [label=".entry:
+  jmp  .if;" shape=box]
+		FUNC_main_NODE_ENTRY -> FUNC_main_NODE_entry
+		FUNC_main_NODE_if [label=".if:
+  br cond .loop1 .loop2;" shape=box]
+		FUNC_main_NODE_entry -> FUNC_main_NODE_if
+		FUNC_main_NODE_loop2 [label=".loop2:
+  jmp  .loop1;" shape=box]
+		FUNC_main_NODE_if -> FUNC_main_NODE_loop2
+		FUNC_main_NODE_loop1 [label=".loop1:
+  jmp  .loop2;" shape=box]
+		FUNC_main_NODE_if -> FUNC_main_NODE_loop1
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

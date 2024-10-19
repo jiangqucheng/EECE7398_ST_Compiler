@@ -1,0 +1,39 @@
+BrilScript ::	Merge-Branch-and-Cross-Loop.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+a0     : n1
+a1     : n1
+n1     : n1
+n2     : n1
+b      : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+a0     <- entry  : ENTRY, a0, entry
+a1     <- entry  : ENTRY, a1, entry
+n1     <- entry  : ENTRY, entry, n1
+n2     <- n1     : ENTRY, entry, n1, n2
+b      <- n2     : ENTRY, b, entry, n1, n2
+RETURN <- b      : ENTRY, b, entry, n1, n2, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  br cond .a0 .a1;
+.a0:
+  jmp  .n1;
+.a1:
+  jmp  .n1;
+.n1:
+  jmp  .n2;
+.n2:
+  br cond .b .n1;
+.b:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Merge-Branch-and-Cross-Loop/Merge-Branch-and-Cross-Loop.bril.cfg.gv.pdf
+output/in_class_example_dom/Merge-Branch-and-Cross-Loop/Merge-Branch-and-Cross-Loop.bril.domt.gv.pdf

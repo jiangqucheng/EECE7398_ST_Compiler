@@ -1,0 +1,31 @@
+BrilScript ::	Cycle-without-Header-Two-Entry-Points.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <8 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+if     : 
+loop2  : loop1
+loop1  : loop2
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+if     <- entry  : ENTRY, entry, if
+loop2  <- if     : ENTRY, entry, if, loop2
+loop1  <- if     : ENTRY, entry, if, loop1
+RETURN <- [ROOT] : RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .if;
+.if:
+  br cond .loop1 .loop2;
+.loop2:
+  jmp  .loop1;
+.loop1:
+  jmp  .loop2;
+.RETURN:
+
+output/in_class_example_dom/Cycle-without-Header-Two-Entry-Points/Cycle-without-Header-Two-Entry-Points.bril.cfg.gv.pdf
+output/in_class_example_dom/Cycle-without-Header-Two-Entry-Points/Cycle-without-Header-Two-Entry-Points.bril.domt.gv.pdf

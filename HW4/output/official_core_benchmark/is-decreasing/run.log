@@ -1,0 +1,99 @@
+BrilScript ::	is-decreasing.bril <3 func> @ example/official_core_benchmark
+
+============= BrilFunction ::  main ( x<int> ) -> None: <3 instr> ==============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  tmp0: bool = call is_decreasing;
+  tmp: bool = id tmp0;
+  print tmp;
+.RETURN:
+
+======== BrilFunction ::  is_decreasing ( x<int> ) -> bool: <29 instr> =========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : label4
+_fdc8._anon0 : label4
+label4       : label13
+label5       : label13, RETURN
+label11      : RETURN
+_fdc8._anon1 : label13
+label12      : label13
+label13      : label4
+label6       : RETURN
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_fdc8._anon0 <- ENTRY        : ENTRY, _fdc8._anon0
+label4       <- [ROOT]       : label4
+label5       <- label4       : label4, label5
+label11      <- label5       : label11, label4, label5
+_fdc8._anon1 <- [ROOT]       : _fdc8._anon1
+label12      <- label5       : label12, label4, label5
+label13      <- [ROOT]       : label13
+label6       <- label4       : label4, label6
+RETURN       <- label4       : label4, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._fdc8._anon0:
+  tmp: int = id x;
+  tmp1: int = const 1;
+  tmp2: int = const -1;
+  tmp3: int = mul tmp1 tmp2;
+  prev: int = id tmp3;
+.label4:
+  tmp7: int = const 0;
+  tmp8: bool = gt tmp tmp7;
+  br tmp8 .label5 .label6;
+.label5:
+  tmp9: int = call last_digit;
+  digit: int = id tmp9;
+  tmp10: bool = lt digit prev;
+  br tmp10 .label11 .label12;
+.label11:
+  tmp14: bool = const False;
+  ret tmp14;
+._fdc8._anon1:
+  jmp  .label13;
+.label12:
+  jmp  .label13;
+.label13:
+  prev: int = id digit;
+  tmp15: int = const 10;
+  tmp16: int = div tmp tmp15;
+  tmp: int = id tmp16;
+  jmp  .label4;
+.label6:
+  tmp17: bool = const True;
+  ret tmp17;
+.RETURN:
+
+=========== BrilFunction ::  last_digit ( x<int> ) -> int: <6 instr> ===========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f5f6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f5f6._anon0 <- ENTRY        : ENTRY, _f5f6._anon0
+RETURN       <- _f5f6._anon0 : ENTRY, _f5f6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f5f6._anon0:
+  tmp18: int = const 10;
+  tmp19: int = div x tmp18;
+  tmp20: int = const 10;
+  tmp21: int = mul tmp19 tmp20;
+  tmp22: int = sub x tmp21;
+  ret tmp22;
+.RETURN:
+
+output/official_core_benchmark/is-decreasing/is-decreasing.bril.cfg.gv.pdf
+output/official_core_benchmark/is-decreasing/is-decreasing.bril.domt.gv.pdf

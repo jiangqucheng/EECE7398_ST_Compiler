@@ -1,0 +1,70 @@
+// Dominator Tree
+digraph DOMTREE {
+	subgraph cluster_in_class_example_1 {
+		label=in_class_example_1
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_in_class_example_1_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		"FUNC_in_class_example_1_NODE__ffb1._anon0" [label="._ffb1._anon0:
+  zero: int = const 0;
+  one: int = const 1;
+  two: int = const 2;
+  three: int = const 3;
+  four: int = const 4;
+  x: int = const 0;
+  y: int = const 0;
+  z: int = const 0;" shape=box]
+		FUNC_in_class_example_1_NODE_ENTRY -> "FUNC_in_class_example_1_NODE__ffb1._anon0"
+		FUNC_in_class_example_1_NODE_assign_input_to_x [label=".assign_input_to_x:
+  x: int = id input;" shape=box]
+		"FUNC_in_class_example_1_NODE__ffb1._anon0" -> FUNC_in_class_example_1_NODE_assign_input_to_x
+		FUNC_in_class_example_1_NODE_is_x_gt_1 [label=".is_x_gt_1:
+  cond1: bool = gt x one;
+  br cond1 .loop_start .print_output;" shape=box]
+		FUNC_in_class_example_1_NODE_assign_input_to_x -> FUNC_in_class_example_1_NODE_is_x_gt_1
+		FUNC_in_class_example_1_NODE_loop_start [label=".loop_start:
+  y: int = div x two;" shape=box]
+		FUNC_in_class_example_1_NODE_is_x_gt_1 -> FUNC_in_class_example_1_NODE_loop_start
+		FUNC_in_class_example_1_NODE_is_y_gt_3 [label=".is_y_gt_3:
+  cond2: bool = gt y three;
+  br cond2 .y_gt_3 .loop_cont1;" shape=box]
+		FUNC_in_class_example_1_NODE_loop_start -> FUNC_in_class_example_1_NODE_is_y_gt_3
+		FUNC_in_class_example_1_NODE_y_gt_3 [label=".y_gt_3:
+  x: int = sub x y;" shape=box]
+		FUNC_in_class_example_1_NODE_is_y_gt_3 -> FUNC_in_class_example_1_NODE_y_gt_3
+		FUNC_in_class_example_1_NODE_loop_cont1 [label=".loop_cont1:
+  z: int = sub x four;" shape=box]
+		FUNC_in_class_example_1_NODE_is_y_gt_3 -> FUNC_in_class_example_1_NODE_loop_cont1
+		FUNC_in_class_example_1_NODE_is_z_gt_0 [label=".is_z_gt_0:
+  cond3: bool = gt z zero;
+  br cond3 .z_gt_0 .loop_cont2;" shape=box]
+		FUNC_in_class_example_1_NODE_loop_cont1 -> FUNC_in_class_example_1_NODE_is_z_gt_0
+		FUNC_in_class_example_1_NODE_z_gt_0 [label=".z_gt_0:
+  x: int = div x two;" shape=box]
+		FUNC_in_class_example_1_NODE_is_z_gt_0 -> FUNC_in_class_example_1_NODE_z_gt_0
+		FUNC_in_class_example_1_NODE_loop_cont2 [label=".loop_cont2:
+  z: int = sub z one;
+  jmp  .is_x_gt_1;" shape=box]
+		FUNC_in_class_example_1_NODE_is_z_gt_0 -> FUNC_in_class_example_1_NODE_loop_cont2
+		FUNC_in_class_example_1_NODE_print_output [label=".print_output:
+  print x;
+  ret ;" shape=box]
+		FUNC_in_class_example_1_NODE_is_x_gt_1 -> FUNC_in_class_example_1_NODE_print_output
+		FUNC_in_class_example_1_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_in_class_example_1_NODE_print_output -> FUNC_in_class_example_1_NODE_RETURN
+	}
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		"FUNC_main_NODE__f0d6._anon0" [label="._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_1;" shape=box]
+		FUNC_main_NODE_ENTRY -> "FUNC_main_NODE__f0d6._anon0"
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+		"FUNC_main_NODE__f0d6._anon0" -> FUNC_main_NODE_RETURN
+	}
+}

@@ -1,0 +1,36 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> FUNC_main_NODE_entry
+		FUNC_main_NODE_entry [label=".entry:
+  br cond .a0 .a1;" shape=box]
+		FUNC_main_NODE_entry -> FUNC_main_NODE_a0
+		FUNC_main_NODE_entry -> FUNC_main_NODE_a1
+		FUNC_main_NODE_a0 [label=".a0:
+  jmp  .n1;" shape=box]
+		FUNC_main_NODE_a0 -> FUNC_main_NODE_n1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_a0 -> FUNC_main_NODE_n1
+		FUNC_main_NODE_a1 [label=".a1:
+  jmp  .n1;" shape=box]
+		FUNC_main_NODE_a1 -> FUNC_main_NODE_n1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_a1 -> FUNC_main_NODE_n1
+		FUNC_main_NODE_n1 [label=".n1:
+  jmp  .n2;" shape=box]
+		FUNC_main_NODE_n1 -> FUNC_main_NODE_n1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_n1 -> FUNC_main_NODE_n2
+		FUNC_main_NODE_n2 [label=".n2:
+  br cond .b .n1;" shape=box]
+		FUNC_main_NODE_n2 -> FUNC_main_NODE_n1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_n2 -> FUNC_main_NODE_n1
+		FUNC_main_NODE_n2 -> FUNC_main_NODE_b
+		FUNC_main_NODE_b [label=".b:
+  ret ;" shape=box]
+		FUNC_main_NODE_b -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

@@ -1,0 +1,35 @@
+BrilScript ::	Branch-Another-Example.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <10 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+n1     : 
+n2     : n2
+n3     : n5
+n4     : n5
+n5     : n2
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+n1     <- ENTRY  : ENTRY, n1
+n2     <- n1     : ENTRY, n1, n2
+n3     <- n2     : ENTRY, n1, n2, n3
+n4     <- n2     : ENTRY, n1, n2, n4
+n5     <- n2     : ENTRY, n1, n2, n5
+RETURN <- [ROOT] : RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.n1:
+  jmp  .n2;
+.n2:
+  br cond1 .n3 .n4;
+.n3:
+  jmp  .n5;
+.n4:
+  jmp  .n5;
+.n5:
+  jmp  .n2;
+.RETURN:
+
+output/in_class_example_dom/Branch-Another-Example/Branch-Another-Example.bril.cfg.gv.pdf
+output/in_class_example_dom/Branch-Another-Example/Branch-Another-Example.bril.domt.gv.pdf

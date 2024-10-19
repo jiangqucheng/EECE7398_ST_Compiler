@@ -1,0 +1,38 @@
+BrilScript ::	cond-args.bril <1 func> @ example/official_df_check
+
+=========== BrilFunction ::  main ( cond<bool> ) -> None: <14 instr> ===========
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+left         : end
+right        : end
+end          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+left         <- _f0d6._anon0 : ENTRY, _f0d6._anon0, left
+right        <- _f0d6._anon0 : ENTRY, _f0d6._anon0, right
+end          <- _f0d6._anon0 : ENTRY, _f0d6._anon0, end
+RETURN       <- end          : ENTRY, _f0d6._anon0, end, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  a: int = const 47;
+  b: int = const 42;
+  br cond .left .right;
+.left:
+  b: int = const 1;
+  c: int = const 5;
+  jmp  .end;
+.right:
+  a: int = const 2;
+  c: int = const 10;
+  jmp  .end;
+.end:
+  d: int = sub a c;
+  print d;
+.RETURN:
+
+output/official_df_check/cond-args/cond-args.bril.cfg.gv.pdf
+output/official_df_check/cond-args/cond-args.bril.domt.gv.pdf

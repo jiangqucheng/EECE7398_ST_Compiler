@@ -1,0 +1,32 @@
+BrilScript ::	basic-loop.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <11 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop   : loop
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop   <- entry  : ENTRY, entry, loop
+exit   <- loop   : ENTRY, entry, exit, loop
+RETURN <- exit   : ENTRY, entry, exit, loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  i: int = const 0;
+  one: int = const 1;
+.loop:
+  i: int = add i one;
+  limit: int = const 10;
+  cond: bool = lt i limit;
+  br cond .loop .exit;
+.exit:
+  print i;
+  ret ;
+.RETURN:
+
+output/edge_cases/basic-loop/basic-loop.bril.cfg.gv.pdf
+output/edge_cases/basic-loop/basic-loop.bril.domt.gv.pdf

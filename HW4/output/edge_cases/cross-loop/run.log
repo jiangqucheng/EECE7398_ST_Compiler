@@ -1,0 +1,39 @@
+BrilScript ::	cross-loop.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <16 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop1  : loop1
+loop2  : loop2
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop1  <- entry  : ENTRY, entry, loop1
+loop2  <- loop1  : ENTRY, entry, loop1, loop2
+exit   <- loop2  : ENTRY, entry, exit, loop1, loop2
+RETURN <- exit   : ENTRY, entry, exit, loop1, loop2, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+.loop1:
+  x: int = const 0;
+  one: int = const 1;
+  x: int = add x one;
+  limit1: int = const 5;
+  cond1: bool = lt x limit1;
+  br cond1 .loop1 .loop2;
+.loop2:
+  y: int = const 0;
+  y: int = add y one;
+  limit2: int = const 10;
+  cond2: bool = lt y limit2;
+  br cond2 .loop2 .exit;
+.exit:
+  ret ;
+.RETURN:
+
+output/edge_cases/cross-loop/cross-loop.bril.cfg.gv.pdf
+output/edge_cases/cross-loop/cross-loop.bril.domt.gv.pdf

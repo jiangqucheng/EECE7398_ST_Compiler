@@ -1,0 +1,35 @@
+BrilScript ::	simple-branch-n-merge.bril <1 func> @ example/edge_cases
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+entry        : 
+true_branch  : merge
+false_branch : merge
+merge        : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+entry        <- ENTRY        : ENTRY, entry
+true_branch  <- entry        : ENTRY, entry, true_branch
+false_branch <- entry        : ENTRY, entry, false_branch
+merge        <- entry        : ENTRY, entry, merge
+RETURN       <- merge        : ENTRY, entry, merge, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  x: int = const 1;
+  br x .true_branch .false_branch;
+.true_branch:
+  y: int = const 10;
+  jmp  .merge;
+.false_branch:
+  y: int = const 20;
+  jmp  .merge;
+.merge:
+  print y;
+  ret ;
+.RETURN:
+
+output/edge_cases/simple-branch-n-merge/simple-branch-n-merge.bril.cfg.gv.pdf
+output/edge_cases/simple-branch-n-merge/simple-branch-n-merge.bril.domt.gv.pdf

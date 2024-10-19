@@ -1,0 +1,47 @@
+// Dominator Tree
+digraph DOMTREE {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		"FUNC_main_NODE__f0d6._anon0" [label="._f0d6._anon0:
+  x: int = const 1;
+  y: int = const 2;
+  z: int = const 3;
+  a: int = const 47;
+  b: int = const 42;" shape=box]
+		FUNC_main_NODE_ENTRY -> "FUNC_main_NODE__f0d6._anon0"
+		FUNC_main_NODE_bb1 [label=".bb1:
+  z: int = add a b;" shape=box]
+		"FUNC_main_NODE__f0d6._anon0" -> FUNC_main_NODE_bb1
+		FUNC_main_NODE_bb2 [label=".bb2:
+  y: int = mul a b;" shape=box]
+		FUNC_main_NODE_bb1 -> FUNC_main_NODE_bb2
+		FUNC_main_NODE_bb_compare [label=".bb_compare:
+  cond_right: int = add a b;
+  cond_left: bool = id y;
+  cond: bool = gt cond_left cond_right;
+  br cond .bb4 .bb5;" shape=box]
+		FUNC_main_NODE_bb2 -> FUNC_main_NODE_bb_compare
+		FUNC_main_NODE_bb4 [label=".bb4:" shape=box]
+		FUNC_main_NODE_bb_compare -> FUNC_main_NODE_bb4
+		FUNC_main_NODE_bb4_0 [label=".bb4_0:
+  one: int = const 1;
+  a: int = add a one;" shape=box]
+		FUNC_main_NODE_bb4 -> FUNC_main_NODE_bb4_0
+		FUNC_main_NODE_bb4_1 [label=".bb4_1:
+  x: int = add a b;
+  jmp  .bb_compare;" shape=box]
+		FUNC_main_NODE_bb4_0 -> FUNC_main_NODE_bb4_1
+		FUNC_main_NODE_bb5 [label=".bb5:
+  print_val: int = add a b;
+  print print_val;
+  zero: int = const 0;
+  ret ;" shape=box]
+		FUNC_main_NODE_bb_compare -> FUNC_main_NODE_bb5
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_bb5 -> FUNC_main_NODE_RETURN
+	}
+}

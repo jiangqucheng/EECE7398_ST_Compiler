@@ -1,0 +1,33 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> "FUNC_main_NODE__f0d6._anon0"
+		"FUNC_main_NODE__f0d6._anon0" [label="._f0d6._anon0:
+  result: int = const 1;
+  i: int = const 8;" shape=box]
+		"FUNC_main_NODE__f0d6._anon0" -> FUNC_main_NODE_header
+		FUNC_main_NODE_header [label=".header:
+  zero: int = const 0;
+  cond: bool = gt i zero;
+  br cond .body .end;" shape=box]
+		FUNC_main_NODE_header -> FUNC_main_NODE_header [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_header -> FUNC_main_NODE_end
+		FUNC_main_NODE_header -> FUNC_main_NODE_body
+		FUNC_main_NODE_body [label=".body:
+  result: int = mul result i;
+  one: int = const 1;
+  i: int = sub i one;
+  jmp  .header;" shape=box]
+		FUNC_main_NODE_body -> FUNC_main_NODE_header [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_body -> FUNC_main_NODE_header
+		FUNC_main_NODE_end [label=".end:
+  print result;" shape=box]
+		FUNC_main_NODE_end -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

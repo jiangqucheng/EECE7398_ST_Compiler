@@ -1,0 +1,37 @@
+BrilScript ::	fact.bril <1 func> @ example/official_df_check
+
+================ BrilFunction ::  main (  ) -> None: <13 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+header       : header
+body         : header
+end          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+header       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, header
+body         <- header       : ENTRY, _f0d6._anon0, body, header
+end          <- header       : ENTRY, _f0d6._anon0, end, header
+RETURN       <- end          : ENTRY, _f0d6._anon0, end, header, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  result: int = const 1;
+  i: int = const 8;
+.header:
+  zero: int = const 0;
+  cond: bool = gt i zero;
+  br cond .body .end;
+.body:
+  result: int = mul result i;
+  one: int = const 1;
+  i: int = sub i one;
+  jmp  .header;
+.end:
+  print result;
+.RETURN:
+
+output/official_df_check/fact/fact.bril.cfg.gv.pdf
+output/official_df_check/fact/fact.bril.domt.gv.pdf

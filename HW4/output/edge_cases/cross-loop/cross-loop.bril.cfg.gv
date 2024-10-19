@@ -1,0 +1,36 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> FUNC_main_NODE_entry
+		FUNC_main_NODE_entry [label=".entry:" shape=box]
+		FUNC_main_NODE_entry -> FUNC_main_NODE_loop1
+		FUNC_main_NODE_loop1 [label=".loop1:
+  x: int = const 0;
+  one: int = const 1;
+  x: int = add x one;
+  limit1: int = const 5;
+  cond1: bool = lt x limit1;
+  br cond1 .loop1 .loop2;" shape=box]
+		FUNC_main_NODE_loop1 -> FUNC_main_NODE_loop1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_loop1 -> FUNC_main_NODE_loop2
+		FUNC_main_NODE_loop1 -> FUNC_main_NODE_loop1
+		FUNC_main_NODE_loop2 [label=".loop2:
+  y: int = const 0;
+  y: int = add y one;
+  limit2: int = const 10;
+  cond2: bool = lt y limit2;
+  br cond2 .loop2 .exit;" shape=box]
+		FUNC_main_NODE_loop2 -> FUNC_main_NODE_loop2 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_loop2 -> FUNC_main_NODE_loop2
+		FUNC_main_NODE_loop2 -> FUNC_main_NODE_exit
+		FUNC_main_NODE_exit [label=".exit:
+  ret ;" shape=box]
+		FUNC_main_NODE_exit -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

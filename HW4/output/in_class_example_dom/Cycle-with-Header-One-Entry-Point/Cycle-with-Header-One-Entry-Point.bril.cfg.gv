@@ -1,0 +1,39 @@
+// Control Flow Graph
+digraph CFG {
+	subgraph cluster_main {
+		label=main
+		color="#f7f7f7"
+		style=filled
+		rankdir=TB
+		FUNC_main_NODE_ENTRY [label=ENTRY fillcolor=lightgray shape=doublecircle style=filled]
+		FUNC_main_NODE_ENTRY -> FUNC_main_NODE_entry
+		FUNC_main_NODE_entry [label=".entry:
+  jmp  .H1;" shape=box]
+		FUNC_main_NODE_entry -> FUNC_main_NODE_H1
+		FUNC_main_NODE_H1 [label=".H1:
+  br if_cond .A .exit;" shape=box]
+		FUNC_main_NODE_H1 -> FUNC_main_NODE_H1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_H1 -> FUNC_main_NODE_exit
+		FUNC_main_NODE_H1 -> FUNC_main_NODE_A
+		FUNC_main_NODE_A [label=".A:
+  jmp  .H2;" shape=box]
+		FUNC_main_NODE_A -> FUNC_main_NODE_H1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_A -> FUNC_main_NODE_H2
+		FUNC_main_NODE_H2 [label=".H2:
+  br cond .B .H1;" shape=box]
+		FUNC_main_NODE_H2 -> FUNC_main_NODE_H1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_H2 -> FUNC_main_NODE_H2 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_H2 -> FUNC_main_NODE_B
+		FUNC_main_NODE_H2 -> FUNC_main_NODE_H1
+		FUNC_main_NODE_B [label=".B:
+  br cond .H2 .H1;" shape=box]
+		FUNC_main_NODE_B -> FUNC_main_NODE_H1 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_B -> FUNC_main_NODE_H2 [label=DF color="#66ccff" constraint=false fontcolor="#66ccff" fontsize=10 style=dashed]
+		FUNC_main_NODE_B -> FUNC_main_NODE_H1
+		FUNC_main_NODE_B -> FUNC_main_NODE_H2
+		FUNC_main_NODE_exit [label=".exit:
+  ret ;" shape=box]
+		FUNC_main_NODE_exit -> FUNC_main_NODE_RETURN
+		FUNC_main_NODE_RETURN [label=RETURN fillcolor=lightgray shape=doublecircle style=filled]
+	}
+}

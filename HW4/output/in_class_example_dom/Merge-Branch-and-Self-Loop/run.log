@@ -1,0 +1,35 @@
+BrilScript ::	Merge-Branch-and-Self-Loop.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <10 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+a0     : n
+a1     : n
+n      : n
+b      : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+a0     <- entry  : ENTRY, a0, entry
+a1     <- entry  : ENTRY, a1, entry
+n      <- entry  : ENTRY, entry, n
+b      <- n      : ENTRY, b, entry, n
+RETURN <- b      : ENTRY, b, entry, n, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  br cond .a0 .a1;
+.a0:
+  jmp  .n;
+.a1:
+  jmp  .n;
+.n:
+  br cond .b .n;
+.b:
+  ret ;
+.RETURN:
+
+output/in_class_example_dom/Merge-Branch-and-Self-Loop/Merge-Branch-and-Self-Loop.bril.cfg.gv.pdf
+output/in_class_example_dom/Merge-Branch-and-Self-Loop/Merge-Branch-and-Self-Loop.bril.domt.gv.pdf
