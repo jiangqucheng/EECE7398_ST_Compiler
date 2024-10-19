@@ -1,0 +1,37 @@
+BrilScript ::	Cycle-with-Header-One-Entry-Point.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <12 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+H1     : H1
+A      : H1
+H2     : H1, H2
+B      : H1, H2
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+H1     <- entry  : ENTRY, H1, entry
+A      <- H1     : ENTRY, A, H1, entry
+H2     <- A      : ENTRY, A, H1, H2, entry
+B      <- H2     : ENTRY, A, B, H1, H2, entry
+exit   <- H1     : ENTRY, H1, entry, exit
+RETURN <- exit   : ENTRY, H1, entry, exit, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .H1;
+.H1:
+  br if_cond .A .exit;
+.A:
+  jmp  .H2;
+.H2:
+  br cond .B .H1;
+.B:
+  br cond .H2 .H1;
+.exit:
+  ret ;
+.RETURN:
+

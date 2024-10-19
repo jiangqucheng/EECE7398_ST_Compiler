@@ -1,0 +1,45 @@
+BrilScript ::	Case-Fallthrough.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <15 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : case0_7, case1
+entry        : case0_7, case1
+switch       : case0_7, case1
+_f0d6._anon0 : case2, dowhile
+case0_7      : case2
+case2        : case1
+case1        : dowhile
+dowhile      : case0_7
+exit         : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+entry        <- ENTRY        : ENTRY, entry
+switch       <- entry        : ENTRY, entry, switch
+_f0d6._anon0 <- [ROOT]       : _f0d6._anon0
+case0_7      <- [ROOT]       : case0_7
+case2        <- [ROOT]       : case2
+case1        <- [ROOT]       : case1
+dowhile      <- [ROOT]       : dowhile
+exit         <- dowhile      : dowhile, exit
+RETURN       <- exit         : dowhile, exit, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .switch;
+.switch:
+  br cond0 .case0_7 .case1;
+._f0d6._anon0:
+  br cond1 .case2 .dowhile;
+.case0_7:
+  jmp  .case2;
+.case2:
+  jmp  .case1;
+.case1:
+  jmp  .dowhile;
+.dowhile:
+  br cond2 .case0_7 .exit;
+.exit:
+  ret ;
+.RETURN:
+

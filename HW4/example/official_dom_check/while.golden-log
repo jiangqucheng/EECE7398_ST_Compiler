@@ -1,0 +1,29 @@
+BrilScript ::	while.bril <1 func> @ example/official_dom_check
+
+============= BrilFunction ::  main ( a<int> ) -> None: <10 instr> =============
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+while.cond   : while.cond
+while.body   : while.cond
+while.finish : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+while.cond   <- ENTRY        : ENTRY, while.cond
+while.body   <- while.cond   : ENTRY, while.body, while.cond
+while.finish <- while.cond   : ENTRY, while.cond, while.finish
+RETURN       <- while.finish : ENTRY, while.cond, while.finish, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.while.cond:
+  zero: int = const 0;
+  is_term: bool = eq a zero;
+  br is_term .while.finish .while.body;
+.while.body:
+  one: int = const 1;
+  a: int = sub a one;
+  jmp  .while.cond;
+.while.finish:
+  print a;
+.RETURN:
+

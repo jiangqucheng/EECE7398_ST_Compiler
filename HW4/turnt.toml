@@ -1,0 +1,3 @@
+[envs.dom_analysis]
+command = "python dom_analysis.py --mute-output {filename}"
+output.golden-log = "-"

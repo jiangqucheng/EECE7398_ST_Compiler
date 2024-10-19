@@ -11,10 +11,9 @@ INPUTDIR = ./example
 BRIL_FILES = $(wildcard $(INPUTDIR)/**/*.bril)
 TARGET_TASKS = $(patsubst $(INPUTDIR)/%.bril,$(SAVEDIR)/%,$(BRIL_FILES))
 
-.PHONY: all
-all: $(TARGET_TASKS)
+.PHONY: all $(TARGET_TASKS) clean turnt 
 
-# .PHONY: $(TARGET_TASKS) # these targets are not files
+all: $(TARGET_TASKS)
 
 $(TARGET_TASKS): $(SAVEDIR)/%: $(INPUTDIR)/%.bril $(SAVEDIR)
 	@ echo "Running analysis on $< \n" | tee -a $(SAVEDIR)/run.log
@@ -25,6 +24,10 @@ $(TARGET_TASKS): $(SAVEDIR)/%: $(INPUTDIR)/%.bril $(SAVEDIR)
 	@ cat $@/run.log | tee -a $(SAVEDIR)/run.log
 	@ rm -rf $(SAVEDIR)/tmp
 	@ echo "\n\n" | tee -a $(SAVEDIR)/run.log
+
+# run the turnt test suite. Make sure result is same as the golden expected
+turnt:
+	turnt -e dom_analysis $(BRIL_FILES)
 
 $(SAVEDIR):
 	@ mkdir -p $(SAVEDIR)

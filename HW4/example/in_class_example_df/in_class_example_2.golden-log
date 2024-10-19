@@ -1,0 +1,56 @@
+BrilScript ::	in_class_example_2.bril <1 func> @ example/in_class_example_df
+
+================ BrilFunction ::  main (  ) -> None: <26 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+bb1          : 
+bb2          : 
+bb_compare   : bb_compare
+bb4          : bb_compare
+bb4_0        : bb_compare
+bb4_1        : bb_compare
+bb5          : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+bb1          <- _f0d6._anon0 : ENTRY, _f0d6._anon0, bb1
+bb2          <- bb1          : ENTRY, _f0d6._anon0, bb1, bb2
+bb_compare   <- bb2          : ENTRY, _f0d6._anon0, bb1, bb2, bb_compare
+bb4          <- bb_compare   : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb_compare
+bb4_0        <- bb4          : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb4_0, bb_compare
+bb4_1        <- bb4_0        : ENTRY, _f0d6._anon0, bb1, bb2, bb4, bb4_0, bb4_1, bb_compare
+bb5          <- bb_compare   : ENTRY, _f0d6._anon0, bb1, bb2, bb5, bb_compare
+RETURN       <- bb5          : ENTRY, _f0d6._anon0, bb1, bb2, bb5, bb_compare, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  x: int = const 1;
+  y: int = const 2;
+  z: int = const 3;
+  a: int = const 47;
+  b: int = const 42;
+.bb1:
+  z: int = add a b;
+.bb2:
+  y: int = mul a b;
+.bb_compare:
+  cond_right: int = add a b;
+  cond_left: bool = id y;
+  cond: bool = gt cond_left cond_right;
+  br cond .bb4 .bb5;
+.bb4:
+.bb4_0:
+  one: int = const 1;
+  a: int = add a one;
+.bb4_1:
+  x: int = add a b;
+  jmp  .bb_compare;
+.bb5:
+  print_val: int = add a b;
+  print print_val;
+  zero: int = const 0;
+  ret ;
+.RETURN:
+

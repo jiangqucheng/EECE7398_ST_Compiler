@@ -1,0 +1,69 @@
+BrilScript ::	in_class_example_3.bril <2 func> @ example/in_class_example_df
+
+==== BrilFunction ::  in_class_example_3 ( input<int> ) -> None: <23 instr> ====
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_fedf._anon0 : 
+bb1          : 
+bb2          : 
+bb_compare   : bb_compare
+bb_loop      : bb_compare
+bb_loop_1    : bb_compare
+bb_loop_2    : bb_compare
+bb_return    : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_fedf._anon0 <- ENTRY        : ENTRY, _fedf._anon0
+bb1          <- _fedf._anon0 : ENTRY, _fedf._anon0, bb1
+bb2          <- bb1          : ENTRY, _fedf._anon0, bb1, bb2
+bb_compare   <- bb2          : ENTRY, _fedf._anon0, bb1, bb2, bb_compare
+bb_loop      <- bb_compare   : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop
+bb_loop_1    <- bb_loop      : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop, bb_loop_1
+bb_loop_2    <- bb_loop_1    : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_loop, bb_loop_1, bb_loop_2
+bb_return    <- bb_compare   : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_return
+RETURN       <- bb_return    : ENTRY, _fedf._anon0, bb1, bb2, bb_compare, bb_return, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._fedf._anon0:
+  x: int = id input;
+  one: int = const 1;
+  two: int = const 2;
+.bb1:
+  a: int = sub x one;
+.bb2:
+  b: int = sub x two;
+.bb_compare:
+  zero: int = const 0;
+  cond: bool = gt x zero;
+  br cond .bb_loop .bb_return;
+.bb_loop:
+.bb_loop_1:
+  totp1: int = mul a b;
+  totp2: int = sub totp1 x;
+  print totp2;
+.bb_loop_2:
+  x: int = sub x one;
+  jmp  .bb_compare;
+.bb_return:
+  totp1: int = mul a b;
+  print totp1;
+  ret ;
+.RETURN:
+
+================ BrilFunction ::  main (  ) -> None: <2 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_3;
+.RETURN:
+

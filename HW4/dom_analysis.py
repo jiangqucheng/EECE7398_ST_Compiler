@@ -14,16 +14,18 @@ from hashlib import sha256
 fast_hash = lambda str: sha256(str).hexdigest()[:3]
 
 
-# usage: <this_script> DEMO_BRIL_FILE [--save-dir=./save] 
+# usage: <this_script> DEMO_BRIL_FILE [--save-dir=./save | --mute-output] 
 
 import argparse
 parser = argparse.ArgumentParser(description='Generate CFG with dominance frontier and Dominator-Tree for a bril script')
 parser.add_argument('DEMO_BRIL_FILE', type=str, help='Path to the bril file')
 parser.add_argument('--save-dir', type=str, default='./save', help='Path to save the generated html files')
+parser.add_argument('--mute-output', action='store_true', help='Mute the output of the graphviz render', default=False)
 args = parser.parse_args()
 
 DEMO_BRIL_FILE = args.DEMO_BRIL_FILE
 SAVE_DIR = args.save_dir
+MUTE_OUTPUT = args.mute_output
 
 # DEMO_BRIL_FILE = "../bril/examples/test/dom/loopcond.bril"
 # DEMO_BRIL_FILE = "../bril/examples/test/dom/while.bril"
@@ -265,6 +267,9 @@ app_graph: Dict[bm.BrilFunction, List[BasicBlock]] = generate_func_cfg_dict(bscr
 
 print()
 dot_cfg, dot_domt = create_graphviz_dot(app_graph)
+
+if MUTE_OUTPUT:
+    exit(0)
 
 # Finally, create the save directory if not exists, and save the generated dot files
 if not os.path.exists(SAVE_DIR):

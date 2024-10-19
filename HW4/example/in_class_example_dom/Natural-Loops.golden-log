@@ -1,0 +1,41 @@
+BrilScript ::	Natural-Loops.bril <1 func> @ example/in_class_example_dom
+
+================ BrilFunction ::  main (  ) -> None: <14 instr> ================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY  : 
+entry  : 
+loop   : loop
+if     : loop
+then   : endif
+else   : endif
+endif  : loop
+exit   : 
+RETURN : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY  <- [ROOT] : ENTRY
+entry  <- ENTRY  : ENTRY, entry
+loop   <- entry  : ENTRY, entry, loop
+if     <- loop   : ENTRY, entry, if, loop
+then   <- if     : ENTRY, entry, if, loop, then
+else   <- if     : ENTRY, else, entry, if, loop
+endif  <- if     : ENTRY, endif, entry, if, loop
+exit   <- loop   : ENTRY, entry, exit, loop
+RETURN <- exit   : ENTRY, entry, exit, loop, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+.entry:
+  jmp  .loop;
+.loop:
+  br cond .if .exit;
+.if:
+  br cond .then .else;
+.then:
+  jmp  .endif;
+.else:
+  jmp  .endif;
+.endif:
+  jmp  .loop;
+.exit:
+  ret ;
+.RETURN:
+

@@ -1,0 +1,85 @@
+BrilScript ::	in_class_example_1.bril <2 func> @ example/in_class_example_df
+
+==== BrilFunction ::  in_class_example_1 ( input<int> ) -> None: <33 instr> ====
+---------------------------------- Dom-Front -----------------------------------
+ENTRY             : 
+_ffb1._anon0      : 
+assign_input_to_x : 
+is_x_gt_1         : is_x_gt_1
+loop_start        : is_x_gt_1
+is_y_gt_3         : is_x_gt_1
+y_gt_3            : loop_cont1
+loop_cont1        : is_x_gt_1
+is_z_gt_0         : is_x_gt_1
+z_gt_0            : loop_cont2
+loop_cont2        : is_x_gt_1
+print_output      : 
+RETURN            : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY             <- [ROOT]            : ENTRY
+_ffb1._anon0      <- ENTRY             : ENTRY, _ffb1._anon0
+assign_input_to_x <- _ffb1._anon0      : ENTRY, _ffb1._anon0, assign_input_to_x
+is_x_gt_1         <- assign_input_to_x : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1
+loop_start        <- is_x_gt_1         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, loop_start
+is_y_gt_3         <- loop_start        : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_start
+y_gt_3            <- is_y_gt_3         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_start, y_gt_3
+loop_cont1        <- is_y_gt_3         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, loop_cont1, loop_start
+is_z_gt_0         <- loop_cont1        : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_start
+z_gt_0            <- is_z_gt_0         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_start, z_gt_0
+loop_cont2        <- is_z_gt_0         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, is_y_gt_3, is_z_gt_0, loop_cont1, loop_cont2, loop_start
+print_output      <- is_x_gt_1         : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, print_output
+RETURN            <- print_output      : ENTRY, _ffb1._anon0, assign_input_to_x, is_x_gt_1, print_output, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._ffb1._anon0:
+  zero: int = const 0;
+  one: int = const 1;
+  two: int = const 2;
+  three: int = const 3;
+  four: int = const 4;
+  x: int = const 0;
+  y: int = const 0;
+  z: int = const 0;
+.assign_input_to_x:
+  x: int = id input;
+.is_x_gt_1:
+  cond1: bool = gt x one;
+  br cond1 .loop_start .print_output;
+.loop_start:
+  y: int = div x two;
+.is_y_gt_3:
+  cond2: bool = gt y three;
+  br cond2 .y_gt_3 .loop_cont1;
+.y_gt_3:
+  x: int = sub x y;
+.loop_cont1:
+  z: int = sub x four;
+.is_z_gt_0:
+  cond3: bool = gt z zero;
+  br cond3 .z_gt_0 .loop_cont2;
+.z_gt_0:
+  x: int = div x two;
+.loop_cont2:
+  z: int = sub z one;
+  jmp  .is_x_gt_1;
+.print_output:
+  print x;
+  ret ;
+.RETURN:
+
+================ BrilFunction ::  main (  ) -> None: <2 instr> =================
+---------------------------------- Dom-Front -----------------------------------
+ENTRY        : 
+_f0d6._anon0 : 
+RETURN       : 
+-------------------------------- Dom & Dom-Tree --------------------------------
+ENTRY        <- [ROOT]       : ENTRY
+_f0d6._anon0 <- ENTRY        : ENTRY, _f0d6._anon0
+RETURN       <- _f0d6._anon0 : ENTRY, _f0d6._anon0, RETURN
+------------------------------------ Script ------------------------------------
+.ENTRY:
+._f0d6._anon0:
+  input: int = const 10;
+  call in_class_example_1;
+.RETURN:
+
