@@ -100,7 +100,7 @@ def iter_func_blocks(bs: bm.BrilScript) -> Iterable[Tuple[bm.BrilFunction, List[
 def generate_func_cfg_dict(bscript: bm.BrilScript) -> Dict[bm.BrilFunction, List[BasicBlock]]:
     app_bbs_dict: OrderedDict[bm.BrilFunction, List[BasicBlock]] = {}
     for each_func, basic_blocks in iter_func_blocks(bscript):
-        print("Function: {}".format(each_func.name))
+        # print("Function: {}".format(each_func.name))
         entry_bb = BasicBlock(bm.BrilInstruction_Label(dict(label=ENTRY_POINT_NAME)), [])
         return_bb = BasicBlock(bm.BrilInstruction_Label(dict(label=RETURN_POINT_NAME)), [])
         prev_bb: Optional[BasicBlock] = None
@@ -260,9 +260,8 @@ def create_graphviz_dot(app_graph: Dict[bm.BrilFunction, List[BasicBlock]]) -> T
 bscript = bm.BrilScript(script_name=os.path.basename(DEMO_BRIL_FILE), file_dir=os.path.dirname(DEMO_BRIL_FILE))
 print(bscript)
 app_graph: Dict[bm.BrilFunction, List[BasicBlock]] = generate_func_cfg_dict(bscript)
-print("Functions: {}".format(', '.join([f"[{idx}]={x.name}" for idx, x in enumerate(app_graph.keys())])))
+# print("Functions: {}".format(', '.join([f"[{idx}]={x.name}" for idx, x in enumerate(app_graph.keys())])))
 
-print(f"{bscript}")
 print()
 dot_cfg, dot_domt = create_graphviz_dot(app_graph)
 
