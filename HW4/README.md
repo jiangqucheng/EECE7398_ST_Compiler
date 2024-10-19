@@ -139,25 +139,38 @@ The integration and testing phase focuses on verifying the correctness of the do
 
 ### Results and Analysis
 
-Check [HERE](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW4/output) to see all graphical testcase results. 
+👉 Check [HERE](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW4/output) to see all graphical testcase results. 
 
 The analysis results demonstrate the correctness and robustness of the dominance utilities. The generated dominance information (dominator sets, dominator tree, and dominance frontier) matches the expected results for all test cases. Below is a summary of the findings:
 
 1. **Branching and Merging**:
    - The dominance analysis correctly identifies the blocks that dominate each branch and accurately determines the dominance frontiers where paths converge.
+   ![image](https://github.com/user-attachments/assets/6270afdc-97ba-4535-beb3-f80045efeee9)
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_dom/Natural-Loops.golden-log#L1-L40
 
 2. **Loop Structures**:
    - **Natural Loops**: The algorithm successfully handles back edges and identifies the loop entry points as dominators for the loop body.
-   - **Cross Loops and Multiple Entry Points**: The implementation accurately distinguishes between blocks that dominate each shared section, even when control flow is complex.
+   - **Cross Loops and Multiple Entry Points**: The implementation accurately distinguishes between blocks that dominate each shared section, even when the control flow is complex.
    - **Self-Loops**: Dominance analysis treats the block as dominating itself, which is correctly identified in the results.
+   ![image](https://github.com/user-attachments/assets/cc748125-3301-455a-a2d0-d805e2408388)
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_dom/Cycle-with-Header-One-Entry-Point.golden-log#L1-L36
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_dom/Cycle-without-Header-Two-Entry-Points.golden-log#L1-L28
 
 3. **Complex Branches and Fallthrough Cases**:
    - For cases with multiple branches and fallthrough behavior, the dominance frontier calculation correctly identifies the regions where the execution paths merge.
    - This indicates that the implementation can handle cases where control flow does not follow a simple pattern, such as switch statements with fallthrough.
+   ![image](https://github.com/user-attachments/assets/bedd4433-5123-451f-b9f7-fb6328e156bd)
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_dom/Branch-Another-Example.golden-log#L1-L32
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_dom/Branch-Complex-Example.golden-log#L1-L48
 
-4. **Edge Cases**:
+4. **Other Edge Cases**:
    - Tests involving cycles without a clear header, and cases with two or more entry points, show that the analysis correctly computes dominators based on the actual paths from any entry to each block.
    - The results reveal that the dominance utilities can generalize beyond typical loop constructs, making them suitable for analyzing diverse control flow patterns.
+
+5. **Other Real Benchmarks**:
+   ![image](https://github.com/user-attachments/assets/dd81d68e-9451-4268-be0b-5b73d7edcb92)
+   https://github.com/jiangqucheng/EECE7398_ST_Compiler/blob/73249ed58947f2faad216637a8d2c3cac0a9af08/HW4/example/in_class_example_df/in_class_example_1.golden-log#L1-L84
+   Check [HERE](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW4/output) to see all graphical test case results. 
 
 ## Conclusion
 
