@@ -1,0 +1,13 @@
+@main {
+.entry:
+  i: int = const 0;
+  one: int = const 1;
+.loop:
+  i: int = add i one;
+  limit: int = const 10;
+  cond: bool = lt i limit;
+  br cond .loop .exit;
+.exit:
+  print i;
+  ret;
+}

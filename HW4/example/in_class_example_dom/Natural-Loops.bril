@@ -1,0 +1,34 @@
+@main {
+  .entry:
+    jmp .loop;
+
+  .loop:
+    br cond .if .exit;
+
+  .if:
+    br cond .then .else;
+
+  .then:
+    jmp .endif;
+
+  .else:
+    jmp .endif;
+
+  .endif:
+    jmp .loop;
+
+  .exit:
+    ret;
+}
+
+
+# # natural loops
+# graph TD;
+#   entry --> loop;
+#   loop --> if;
+#   if --> then;
+#   if --> else;
+#   then --> endif;
+#   else --> endif;
+#   endif --> loop;
+#   loop --> exit;

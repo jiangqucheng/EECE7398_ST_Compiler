@@ -1,0 +1,28 @@
+@main {
+  .entry:
+    br cond .a0 .a1;
+
+  .a0:
+    jmp .n1;
+
+  .a1:
+    jmp .n1;
+
+  .n1:
+    jmp .n2;
+
+  .n2:
+    br cond .b .n1;
+
+  .b:
+    ret;
+}
+
+
+# # merge, branch, and cross loop
+# graph TD;
+#   a0[" "] --> n1;
+#   a1[" "] --> n1;
+#   n1 --> n2;
+#   n2 --> n1;
+#   n2 --> b[" "];

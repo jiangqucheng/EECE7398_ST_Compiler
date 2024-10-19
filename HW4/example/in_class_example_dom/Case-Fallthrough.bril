@@ -1,0 +1,36 @@
+@main {
+  .entry:
+    jmp .switch;
+
+  .switch:
+    br cond0 .case0_7 .case1;
+    br cond1 .case2 .dowhile;
+
+  .case0_7:
+    jmp .case2;
+
+  .case2:
+    jmp .case1;
+
+  .case1:
+    jmp .dowhile;
+
+  .dowhile:
+    br cond2 .case0_7 .exit;
+
+  .exit:
+    ret;
+}
+
+
+# # case fallthrough
+# graph TD;
+#   entry --> switch;
+#   switch --> case0-7;
+#   switch --> case1;
+#   switch --> case2;
+#   case0-7 --> case2;
+#   case2 --> case1;
+#   case1 --> dowhile;
+#   dowhile --> case0-7;
+#   dowhile --> exit;

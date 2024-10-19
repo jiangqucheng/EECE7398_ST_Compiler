@@ -1,0 +1,22 @@
+@main {
+  .entry:
+    jmp .if;
+
+  .if:
+    br cond .loop1 .loop2;
+
+  .loop2:
+    jmp .loop1;
+
+  .loop1:
+    jmp .loop2;
+}
+
+
+# # cycle without header, two entry points.
+# graph TD;
+#   entry --> if;
+#   if --> loop1;
+#   if --> loop2;
+#   loop2 --> loop1;
+#   loop1 --> loop2;

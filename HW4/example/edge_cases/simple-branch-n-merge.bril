@@ -1,0 +1,14 @@
+@main {
+.entry:
+  x: int = const 1;
+  br x .true_branch .false_branch;
+.true_branch:
+  y: int = const 10;
+  jmp .merge;
+.false_branch:
+  y: int = const 20;
+  jmp .merge;
+.merge:
+  print y;
+  ret;
+}

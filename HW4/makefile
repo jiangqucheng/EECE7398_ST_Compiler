@@ -14,7 +14,7 @@ TARGET_TASKS = $(patsubst $(INPUTDIR)/%.bril,$(SAVEDIR)/%,$(BRIL_FILES))
 .PHONY: all
 all: $(TARGET_TASKS)
 
-.PHONY: $(TARGET_TASKS) # these targets are not files
+# .PHONY: $(TARGET_TASKS) # these targets are not files
 
 $(TARGET_TASKS): $(SAVEDIR)/%: $(INPUTDIR)/%.bril $(SAVEDIR)
 	@ echo "Running analysis on $< \n" | tee -a $(SAVEDIR)/run.log

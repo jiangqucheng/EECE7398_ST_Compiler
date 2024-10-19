@@ -1,0 +1,30 @@
+@main {
+  .entry:
+    jmp .H1;
+
+  .H1:
+    br if_cond .A .exit;
+
+  .A:
+    jmp .H2;
+
+  .H2:
+    br cond .B .H1;
+
+  .B:
+    br cond .H2 .H1;
+
+  .exit:
+    ret;
+}
+
+
+# # cycle with header, one entry points.
+# graph TD;
+#   entry --> H1;
+#   H1 --> A;
+#   A --> H2;
+#   H2 --> B;
+#   B --> H2;
+#   B --> H1;
+#   H1 --> exit;

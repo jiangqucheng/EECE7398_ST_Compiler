@@ -1,0 +1,43 @@
+@main {
+  .n0:
+    br cond1 .n5 .n1;
+
+  .n5:
+    br cond2 .n7 .n6;
+
+  .n1:
+    br cond3 .n2 .n3;
+
+  .n7:
+    jmp .n8;
+
+  .n6:
+    jmp .n4;
+
+  .n2:
+    jmp .n4;
+
+  .n4:
+    jmp .n8;
+
+  .n3:
+    jmp .n8;
+
+  .n8:
+    ret;
+}
+
+
+# # branch complex example
+# graph TD;
+#   n0 --> n5;
+#   n0 --> n1;
+#   n5 --> n7;
+#   n5 --> n6;
+#   n1 --> n2;
+#   n1 --> n3;
+#   n7 --> n8;
+#   n6 --> n4;
+#   n2 --> n4;
+#   n4 --> n8;
+#   n3 --> n8;
