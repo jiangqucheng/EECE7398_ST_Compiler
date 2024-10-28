@@ -4,6 +4,3 @@
 [submodule "pyvis"]
 	path = pyvis
 	url = git@github.com:jiangqucheng/pyvis.git
-[submodule "HW5/llvm-pass-skeleton"]
-	path = HW5/llvm-pass-skeleton
-	url = git@github.com:sampsyo/llvm-pass-skeleton.git
