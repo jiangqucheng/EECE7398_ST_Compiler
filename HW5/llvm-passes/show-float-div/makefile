@@ -4,7 +4,7 @@ RTLIB_SOURCE = rtlib.c
 RTLIB_LIB_NAME = $(basename $(RTLIB_SOURCE))
 RTLIB_LIB_FILE = $(BUILD_DIR)/lib$(RTLIB_LIB_NAME).so
 
-LLVM_PASS_LIB = $(BUILD_DIR)/skeleton/SkeletonPass.so
+LLVM_PASS_LIB = $(BUILD_DIR)/ShowFDiv/ShowFDivPass.so
 
 TARGET_SRC = example.c
 TARGET = $(basename $(TARGET_SRC))
@@ -20,8 +20,8 @@ RM_RF = rm -rf
 
 all: $(BUILD_DIR) $(TARGET)
 
-$(LLVM_PASS_LIB): skeleton/Skeleton.cpp skeleton/CMakeLists.txt CMakeLists.txt
-	@echo "Building SkeletonPass..."
+$(LLVM_PASS_LIB): ShowFDiv/ShowFDiv.cpp ShowFDiv/CMakeLists.txt CMakeLists.txt
+	@echo "Building LLVM Pass..."
 	@make -C . $(BUILD_DIR)
 	cd $(BUILD_DIR) && cmake .. && make
 
