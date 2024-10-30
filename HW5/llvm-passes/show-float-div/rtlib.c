@@ -4,5 +4,5 @@ void logop(int i) {
 }
 
 void logfdiv(float dest, float lhs, float rhs) {
-    printf("logfdiv: %f = %f / %f\n", dest, lhs, rhs);
+    printf("[logfdiv: %f = %f / %f]\n", dest, lhs, rhs);
 }

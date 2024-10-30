@@ -8,7 +8,8 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 using namespace llvm;
 
-#define __HERE__ __FILE__ << ":" << __LINE__
+#define __FILE_NAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define __HERE__ __FILE_NAME__ << ":" << __LINE__
 
 namespace {
 
@@ -27,23 +28,15 @@ struct SkeletonPass : public PassInfoMixin<SkeletonPass> {
             for (auto &B : F) {
                 for (auto &I : B) {
                     if (auto *op = dyn_cast<BinaryOperator>(&I)) {
-
-                        errs() << "\n";
-                        errs() << __HERE__ << ": Found binary operator: " << *op << "\n";
-                        I.print(errs());
-                        errs() << "\n";
-                        errs() << "Opcode: " << op->getOpcode() << "\n";
-                        errs() << "OpcodeName: " << op->getOpcodeName() << "\n";
-                        errs() << (op->getOpcode() == llvm::Instruction::Add)
-                               << (op->getOpcode() == llvm::Instruction::FAdd)
-                               << (op->getOpcode() == llvm::Instruction::Sub)
-                               << (op->getOpcode() == llvm::Instruction::FSub)
-                               << (op->getOpcode() == llvm::Instruction::Mul)
-                               << (op->getOpcode() == llvm::Instruction::FMul)
-                               << (op->getOpcode() == llvm::Instruction::FDiv) << "\n";
-                        errs() << "\n";
-
                         if (op->getOpcode() == llvm::Instruction::FDiv) {
+
+                            errs() << "\n";
+                            errs() << __HERE__ << ": Found FDiv operator: " << *op << "\n";
+                            I.print(errs());
+                            errs() << "\n";
+                            errs() << "OpcodeName: " << op->getOpcodeName() << "\n";
+                            errs() << "\n";
+
                             // create a builder based on the current instruction
                             IRBuilder<> builder(op);
 
