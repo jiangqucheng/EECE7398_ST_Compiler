@@ -26,9 +26,9 @@ export LD_LIBRARY_PATH=<PRJ_DIR>/HW5/llvm-passes/show-float-div/build:$LD_LIBRAR
 ## Detail Design
 
 There're __3__ passes implemented in this Homework: 
-- __loop-unroll__: Implemented a extremely simple loop unrolling pass, with only do unrolling once if it finds a valid loop. (An ambitious task as the instruction of this homework suggested.)
-- __show-bin-op__: Display when there is a binery operation, log it out when doing compile, and call a stab function in `rtlib` during runtime to print the value that will be stored in destination. 
-- __show-float-div__: As the instruction of this homework suggested, this pass is an example of unambitious task, which display only the `fdiv` operation, and act the very same as the `show-bin-op` pass does when encounting `fdiv` operation.
+- __loop-unroll__: Implemented a straightforward loop unrolling pass, only unrolling once if it finds a valid loop. (An ambitious task as the instruction of this homework suggested.)
+- __show-bin-op__: Display when there is a binary operation, log it out when doing compile, and call a stab function in `rtlib` during runtime to print the value stored in the destination. 
+- __show-float-div__: As the instruction of this homework suggested, this pass is an example of an unambitious task, which displays only the `fdiv` operation, and acts the very same as the `show-bin-op` pass does when encountering `fdiv` operation.
 
 _* Check [Passes Source Code](https://github.com/jiangqucheng/EECE7398_ST_Compiler/tree/main/HW5/llvm-passes) for details._
 
@@ -36,12 +36,12 @@ _* Check [Passes Source Code](https://github.com/jiangqucheng/EECE7398_ST_Compil
 
 Some examples of the _real-ish_ C/C++ program are provided in this homework.
 - `example.c` in each pass: Unit Tests to make sure passes are performing the correct results as wished. 
-- `matmul.cpp`: A square matrix multiply testbench, which would be a greate sceneral to test the loop unrolling pass, but also can test the other two display passes. 
+- `matmul.cpp`: A square matrix multiply testbench, which would be a great scenario to test the loop unrolling pass, but also can test the other two display passes. 
 - `projectile_motion.cpp`: Simulates the motion of a projectile launched at a given angle and initial velocity within finite N steps.
 
 To build the tests:
 
-For `examples.c` and the pass library, go to each pass folder, and run `make`. All the results will be generated, includind: 
+For `examples.c` and the pass library, go to each pass folder, and run `make`. All the results will be generated, including: 
 - `$(BUILD_DIR)/$(PASS_NAME)/$(PASS_NAME)Pass.so`: Pass plugin as a dynamic lib.
 - `$(BUILD_DIR)/lib$(RTLIB_LIB_NAME).so`: Additional Runtime functions (i.e. Stab call funcs).
 - `example`: Executable of `examples.c`.
