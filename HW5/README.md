@@ -16,7 +16,7 @@ After experiencing these kinds of frustrating config stuff, I strongly recommend
 
 ### Env startup
 
-If the LLVM toolchain is installed in the system level default location, there's no need to do this extra step. 
+If the LLVM toolchain is installed in the system-level default location, there's no need to do this extra step. 
 
 ```bash
 export LLVM_DIR=$CONDA_PREFIX/lib/cmake/llvm
@@ -47,7 +47,7 @@ For `examples.c` and the pass library, go to each pass folder, and run `make`. A
 - `example`: Executable of `examples.c`.
 To run the `example`, use `make run` instead of `make`. 
 
-For `matmul.cpp` and `projectile_motion.cpp`, go to the app folder, and run `make`. Executable will be generated at the same folder.
+For `matmul.cpp` and `projectile_motion.cpp`, go to the app folder, and run `make`. Executable will be generated in the same folder.
 Use `make run` to test the execution.
 
 ## Results and Analysis
