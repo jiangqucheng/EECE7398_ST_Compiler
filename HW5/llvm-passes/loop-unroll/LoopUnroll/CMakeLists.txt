@@ -1,4 +1,4 @@
-add_llvm_pass_plugin(ShowFDivPass
+add_llvm_pass_plugin(LoopUnrollPass
     # List your source files here.
-    ShowFDiv.cpp
+    LoopUnroll.cpp
 )
