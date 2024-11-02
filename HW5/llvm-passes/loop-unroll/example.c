@@ -1,18 +1,30 @@
 #include <stdio.h>
-int main(int argc, const char** argv) {
-    int num;
-    printf("Enter a number: ");
-    scanf("%i", &num);
-    printf("%i\n", num + 2);
-    printf("%i\n", num - 2);
-    printf("%i\n", num * 2);
-    printf("%i\n", num / 2);
-    float fnum;
-    printf("Enter a float number: ");
-    scanf("%f", &fnum);
-    printf("%f\n", fnum + 2.0);
-    printf("%f\n", fnum - 2.0);
-    printf("%f\n", fnum * 2.0);
-    printf("%f\n", fnum / 2.0);
+
+int test2() {
+    int sum = 0;
+    for (int i = 0; i < 10; i++) {
+        sum += i;
+    }
+    printf("Sum: %d\n", sum);
     return 0;
 }
+
+// int test1() {
+//     int jjj = 0;
+//     for (int i = 0; i < 100; i++) {
+//         for (int k = 0; k < 100; k++) {
+//             jjj += i;
+//             jjj -= (i-1);
+//             jjj *= (i%10);
+//         }
+//     }
+//     printf("%i\n", jjj);
+//     return 0;
+// }
+
+int main(int argc, const char** argv) {
+    // test1();
+    test2();
+    return 0;
+}
+
